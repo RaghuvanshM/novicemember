@@ -1,0 +1,1 @@
+export const  api ='https://novice.jingleinfo.com/novicecabnew/mobileapp/Member/'
