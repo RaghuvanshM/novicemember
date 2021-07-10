@@ -1,7 +1,6 @@
-import React, {Component} from 'react';
-import {Text, StyleSheet, TouchableOpacity} from 'react-native';
+import React, { Component } from 'react';
+import { Text, TouchableOpacity, StyleSheet, View } from 'react-native';
 import Colors from '../../module/utils/Colors';
-import styles from './style';
 
 export default class Button extends Component {
   constructor(props) {
@@ -9,9 +8,36 @@ export default class Button extends Component {
   }
   render() {
     return (
-      <TouchableOpacity style={[styles.btn,this.props.style]} onPress={this.props.onPress}>
-        <Text style={[styles.label,this.props.textStyle]}>{this.props.title}</Text>
-      </TouchableOpacity>
+      <View style={styles.upperview}>
+        <TouchableOpacity
+          style={[styles.btn,this.props.style]}
+          onPress={this.props.onPress}
+        >
+           <Text style={[styles.label, this.props.textStyle]}>
+            {this.props.title}
+           </Text>
+        </TouchableOpacity>
+      </View>
     );
   }
 }
+const styles = StyleSheet.create({
+  upperview: {
+    borderWidth: 2, 
+    width: '90%', 
+    alignSelf: 'center',
+    padding:1,
+    borderRadius:30,
+    borderColor:Colors.buttoncolor
+  },
+  btn: {
+    paddingVertical: 12,
+    backgroundColor: Colors.buttoncolor,
+    borderRadius:30
+  },
+  label: {
+    color: Colors.themeColor,
+    textAlign:'center',
+    fontSize: 15,
+  },
+})

@@ -1,4 +1,4 @@
-import React, {Component, useState} from 'react';
+import React, { Component, useState } from 'react';
 import {
   Text,
   View,
@@ -6,19 +6,19 @@ import {
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
+  Image,
 } from 'react-native';
-import {TextInput, Button} from 'react-native-paper';
-import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/AntDesign';
-import {useNavigation} from '@react-navigation/native';
-import {getPhoneNumber} from '../module/selectors';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
-import {useSelector} from 'react-redux';
-import { showMessage, hideMessage } from "react-native-flash-message";
-
+import { useNavigation } from '@react-navigation/native';
+import { getPhoneNumber } from '../module/selectors';
+import { useSelector } from 'react-redux';
+import { showMessage, hideMessage } from 'react-native-flash-message';
+import Iconlist from '../module/utils/icon';
+import Allimage from '../assets/images/image';
+import Colors from '../module/utils/Colors';
+import CustomTextInput from '../component/TextInput/OtpBox';
+import CustomTextBoxLabel from '../component/Label/TextBoxLabel';
+import CutomButton from '../component/Button/Button';
 const OtpScreen = () => {
   const [otpverify, setOTP] = useState('');
   const navigation = useNavigation();
@@ -26,96 +26,86 @@ const OtpScreen = () => {
   console.log(phonenumber);
   const confirmVerificationCode = () => {
     if (phonenumber.otp == otpverify) {
-        showMessage({
-            message: "Simple message",
-            type: "success",
-          });
-          setOTP('')
-          navigation.navigate('Registration')
+      showMessage({
+        message: 'Simple message',
+        type: 'success',
+      });
+      setOTP('');
+      navigation.navigate('Registration');
     } else {
-        showMessage({
-            message: "incorrect otp",
-            type: "danger",
-          });
+      showMessage({
+        message: 'incorrect otp',
+        type: 'danger',
+      });
     }
   };
   return (
-    <View style={{flex: 1}}>
+    <ScrollView contentContainerStyle={{ flex: 1 }}>
       <TouchableOpacity
+        style={{ flex: 0.3 }}
         onPress={() => {
           navigation.goBack();
-        }}
-        style={{flex: 1}}>
-        <View style={{padding: 10}}>
-          <Icon name="arrowleft" size={30} color="black" />
-        </View>
+        }}>
+        <Icon name={Iconlist.arrowleft} size={30} style={{ margin: '4%' }} />
       </TouchableOpacity>
-      <View style={{flex: 4}}>
-        <View style={styles.singletextinput}>
-          <Text style={styles.becomedriver}>Enter OTP</Text>
-          <TextInput
-            label="Enter Otp"
-            onChangeText={text => {
-              setOTP(text);
-            }}
-            maxLength={10}
-            keyboardType="number-pad"
-            value={otpverify}
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Image
+          source={Allimage.mobilephone}
+          resizeMode="contain"
+          style={{ height: '40%', width: '90%' }}
+        />
+        <Text style={styles.mobiletext}>OTP VERIFICATION</Text>
+        <Text style={styles.otpText}>Enter OTP sent to +917895769455</Text>
+      </View>
+      <View style={{ flex: 1 }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+          <CustomTextInput placeholder={''} keyboardType={'number-pad'} />
+          <CustomTextInput placeholder={''} keyboardType={'number-pad'} />
+          <CustomTextInput placeholder={''} keyboardType={'number-pad'} />
+          <CustomTextInput placeholder={''} keyboardType={'number-pad'}
+
+
           />
         </View>
-        <TouchableOpacity
-          onPress={confirmVerificationCode}
-          style={styles.sendotpbutton}>
-          <LinearGradient
-            colors={['#e83e8c', '#e83e8c', '#e83e8c']}
-            style={styles.linearGradient}>
-            <Text style={styles.buttonText}>VERIFY</Text>
-          </LinearGradient>
-        </TouchableOpacity>
+        <View style={{ flexDirection: 'row', justifyContent: 'center', margin: '5%' }}>
+          <Text style={styles.otpText}>Didn't receive the OTP ?</Text>
+          <TouchableOpacity><Text style={styles.resendotp}>Resend OTP </Text></TouchableOpacity>
+        </View>
+        <View>
+          <CutomButton title={'Submit'} 
+          textStyle={styles.buttontext}
+          onPress={()=>{navigation.navigate('Registration')}}
+
+          />
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
 export default OtpScreen;
 
 const styles = StyleSheet.create({
-  cardview: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginHorizontal: '3%',
-    marginTop: hp('3%'),
-  },
-  singletextinput: {
-    width: wp('95%'),
+  buttontext: {
+    fontSize: 20,
+    color: 'white',
     alignSelf: 'center',
-    marginTop: hp('10%'),
+    fontWeight: 'bold',
+    justifyContent: 'center',
   },
-  linearGradient: {
-    padding: 5,
-    width: wp('90%'),
-    marginTop: hp('5%'),
-    alignSelf: 'center',
-    borderRadius: 10,
-  },
-  buttonText: {
+  mobiletext: {
     fontSize: 18,
-    fontFamily: 'Gill Sans',
-    textAlign: 'center',
-    margin: 10,
-    color: '#ffffff',
-    backgroundColor: 'transparent',
+    fontFamily: 'OpenSans-Light',
+    margin: '2%',
   },
-  privacypolicy: {
-    flexDirection: 'row',
-    marginHorizontal: wp('2%'),
-    marginTop: hp('2%'),
+  otpText: {
+    fontSize: 18,
+    color: Colors.forgetPassowrdcolor,
+    fontFamily: 'OpenSans-Bold',
   },
-  becomedriver: {
-    fontFamily: 'Montserrat-BlackItalic',
-    fontSize: 24,
-    alignSelf: 'center',
-    color: '#34404b',
-    marginBottom: hp('5%'),
-  },
+  resendotp: {
+    fontSize: 18,
+    color: Colors.resesttTextColor,
+    fontFamily: 'OpenSans-Bold'
+  }
 });

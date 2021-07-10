@@ -9,6 +9,7 @@ import OtpScreen from '../src/Screen/OtpScreen';
 import OtpVerify from '../src/Screen/Otp';
 import SearchResultPage from '../src/Screen/SearchResult';
 import Cablist from '../src/Screen/CabList';
+import RegistrationNext from '../src/Screen/RegistrationNext'
 export {
     ConfirmationScreen,
     RegistrationScreen,
@@ -20,5 +21,6 @@ export {
     OtpScreen,
     OtpVerify,
     SearchResultPage,
-    Cablist
+    Cablist,
+    RegistrationNext
 }

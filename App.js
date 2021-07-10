@@ -2,7 +2,10 @@ import 'react-native-gesture-handler';
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { ConfirmationScreen, RegistrationScreen, LoginScreen, BottomTabScreen,SplashScreen,OtpScreen, OtpVerify,SearchResultPage, Cablist } from './src';
+import { ConfirmationScreen, RegistrationScreen, LoginScreen, 
+  BottomTabScreen,SplashScreen,OtpScreen, OtpVerify,SearchResultPage,
+   Cablist,RegistrationNext } 
+  from './src';
 import FlashMessage from "react-native-flash-message";
 import CabListScreen from './src/Screen/CabList';
 
@@ -20,6 +23,8 @@ export default function App() {
         <Stack.Screen name="BottomTab" component={BottomTabScreen} />
         <Stack.Screen name="searchresultpage" component={SearchResultPage} />
         <Stack.Screen name="cablistscreen" component={Cablist} />
+        <Stack.Screen name="resistrationnext" component={RegistrationNext} />
+
       </Stack.Navigator>
       <FlashMessage position="bottom" duration={25000} />
     </NavigationContainer>
