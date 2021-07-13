@@ -34,7 +34,7 @@ const LoginScreen = ({ props }) => {
       current_lat: 28.9087,
       current_lat: 70.393983,
     };
-    console.log(data);
+  
     await fetch(url, {
       method: 'POST',
       headers: {
@@ -46,7 +46,7 @@ const LoginScreen = ({ props }) => {
     })
       .then(res => res.json())
       .then(res2 => {
-        console.log(res2);
+
         if (res2.response.status === 'true') {
           showMessage({
             message: res2.response.message,
@@ -75,9 +75,9 @@ const LoginScreen = ({ props }) => {
       await GoogleSignin.hasPlayServices();
       const userinfo = await GoogleSignin.signIn();
       dispatch(authUser(userinfo.user));
-      navigation.navigate('BottomTab');
+      navigation.navigate('DrawerNavigaion');
     } catch (error) {
-      console.log(error);
+     
     }
   };
 

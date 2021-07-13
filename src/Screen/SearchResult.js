@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StatusBar,
   StyleSheet,
@@ -9,7 +9,7 @@ import {
   FlatList,
   SafeAreaView,
 } from 'react-native';
-import ArrowLeft from 'react-native-vector-icons/FontAwesome5';
+import ArrowLeft from 'react-native-vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
 import SearchResultComponent from '../component/SearchResultComponent';
 import { getUserProfile, getAddress } from '../../src/module/selectors';
@@ -21,7 +21,8 @@ import {
 import Mapmyindia from 'mapmyindia-restapi-react-native-beta';
 import { useDispatch } from 'react-redux';
 import { userpickupLocation, userdropLocatin } from '../module/actions';
-
+import Colors from '../module/utils/Colors';
+import Iconlist from '../module/utils/icon'
 const SearchResult = props => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -30,10 +31,10 @@ const SearchResult = props => {
   const [pickupaddress, setPickupAddress] = useState([]);
   const [dropaddress, setDropAddress] = useState();
   const pickupLocation = text => {
-    console.log(text === '');
+   
     if (text !== '') {
       Mapmyindia.atlas_auto({ query: text }, response => {
-        console.log(response);
+   
         setSearchResult(response.suggestedLocations);
       });
     } else {
@@ -41,10 +42,10 @@ const SearchResult = props => {
     }
   };
   const dropLocation = text => {
-    console.log(text === '');
+
     if (text !== '') {
       Mapmyindia.atlas_auto({ query: text }, response => {
-        console.log(response);
+      
         setSearchResult(response.suggestedLocations);
       });
     } else {
@@ -53,8 +54,12 @@ const SearchResult = props => {
   };
 
   const onTextPress = ({ item }) => {
+    Mapmyindia.atlas_auto({query: 'agr'}, (response) => {
+      console.log(response)
+      
+      });
     if (props.route.params.screen == 'pickupsscreen') {
-      dispatch(userpickupLocation(item.placeAddress));
+      dispatch(userpickupLocation(item.placeAddress))
       navigation.goBack();
     } else {
       dispatch(userdropLocatin(item.placeAddress));
@@ -66,6 +71,9 @@ const SearchResult = props => {
   const onNextButtonPress = () => {
     navigation.navigate('cablistscreen');
   };
+  useEffect(()=>{
+   
+  },[])
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <KeyboardAwareScrollView style={styles.headerText}>
@@ -75,14 +83,14 @@ const SearchResult = props => {
             onPress={() => {
               navigation.goBack();
             }}>
-            <ArrowLeft name="arrow-left" size={30} />
+            <ArrowLeft name={Iconlist.arrowleft} size={30} />
           </TouchableOpacity>
           <View style={{ flex: 0.9, backgroundColor: '#d4d6d9' }}>
             {props.route.params.screen == 'pickupsscreen' ? (
               <TextInput
                 placeholder="Pick Up Location"
                 style={styles.textinput}
-                placeholderTextColor="#38647d"
+                placeholderTextColor={Colors.screentextColor}
                 defaultValue={currentAddress}
                 onChangeText={text => pickupLocation(text)}
               />
@@ -90,7 +98,7 @@ const SearchResult = props => {
               <TextInput
                 placeholder="Drop Location"
                 style={styles.textinput}
-                placeholderTextColor="#38647d"
+                placeholderTextColor={Colors.screentextColor}
                 onChangeText={text => pickupLocation(text)}
               />
             )}
@@ -138,10 +146,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   textinput: {
-    fontSize: 20,
+    fontSize: 16,
     flex: 1,
-    color: '#38647d',
-    fontWeight: 'bold',
+   
   },
  
 });

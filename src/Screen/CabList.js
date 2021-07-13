@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Mapmyindia from 'mapmyindia-restapi-react-native-beta';
 import { Text, View, StyleSheet, Image, FlatList, TouchableOpacity } from 'react-native';
 import MapView from 'react-native-maps';
-import ArrowLeft from 'react-native-vector-icons/FontAwesome5';
+import ArrowLeft from 'react-native-vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
 import { Marker } from 'react-native-maps';
 import images from '../assets/images/image';
@@ -63,13 +63,13 @@ const CabListScreen = () => {
     ];
     const singleItemPress = (item, index) => {
         setItemIndex(index)
-        console.log(index)
+        
     }
     const renderItem = ({ item, index }) => {
 
         return (
             <TouchableOpacity
-                style={itemindex==index?{...styles.itemstyle}:{...styles.itemstyle1}}
+                style={itemindex == index ? { ...styles.itemstyle } : { ...styles.itemstyle1 }}
                 onPress={() => { singleItemPress(item, index) }}
             >
                 <View style={{ flexDirection: 'row', padding: 10 }}>
@@ -110,7 +110,7 @@ const CabListScreen = () => {
                     />
 
                     <ArrowLeft
-                        name="arrow-left"
+                        name="arrowleft"
                         size={30}
                         style={{ margin: '4%', marginBottom: '30%', height: 30, width: 30 }}
                         onPress={() => {
@@ -126,12 +126,12 @@ const CabListScreen = () => {
                     keyExtractor={(item, index) => String(index)}
                 />
             </View>
-            <Button
-                title={'Confirm'}
-                style={{ width: '70%', marginTop: '2%', marginBottom: '3%' }}
-                textStyle={styles.buttontext}
-
-            />
+            <View style={{marginVertical:'1%'}}>
+                <Button
+                    title={'Confirm'}
+                    textStyle={styles.buttontext}
+                />
+            </View>
         </View>
     );
 };
@@ -150,13 +150,12 @@ const styles = StyleSheet.create({
         width: 100
     },
     cabname: {
-        fontSize: 22,
-        color: '#38647d',
+        fontSize: 16,
+        color:Colors.sidbardbackgroundcolor,
         fontWeight: 'bold'
     },
     droptime: {
-        fontSize: 18,
-        color: '#38647d',
+        color:Colors.screentextColor
     },
     buttontext: {
         fontSize: 20,
@@ -166,10 +165,10 @@ const styles = StyleSheet.create({
 
         justifyContent: 'center',
     },
-    itemstyle:{
-        flexDirection: 'row', justifyContent: 'space-between' 
+    itemstyle: {
+        flexDirection: 'row', justifyContent: 'space-between'
     },
-    itemstyle1:{
-        flexDirection: 'row', justifyContent: 'space-between' ,backgroundColor:Colors.selecteditmeback
+    itemstyle1: {
+        flexDirection: 'row', justifyContent: 'space-between', backgroundColor: Colors.selecteditmeback
     }
 });

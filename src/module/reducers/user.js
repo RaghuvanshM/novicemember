@@ -7,6 +7,8 @@ import {
 
   userpickupLocation,
   userdropLocatin,
+  userDropLatLong,
+  userpickupLatLong,
 } from '../actions';
 
 const initialState = {
@@ -16,6 +18,8 @@ const initialState = {
   currentAddress: '',
   pickupaddress: '',
   dropaddress: '',
+  pickuplatlong:0,
+  droplatlong:0
 };
 
 export const user = createReducer({}, initialState);
@@ -27,7 +31,7 @@ user.on(authUser, (state, payload) => {
   };
 });
 user.on(signOutUser, state => {
-  console.log('signoutuser call');
+
   return {
     ...state,
     isAuth: false,
@@ -41,7 +45,7 @@ user.on(sendOtp, (state, payload) => {
   };
 });
 user.on(userCurrntAddress, (state, payload) => {
-  console.log(payload);
+
   return {
     ...state,
     currentAddress: payload,
@@ -49,16 +53,31 @@ user.on(userCurrntAddress, (state, payload) => {
   };
 });
 user.on(userpickupLocation, (state, payload) => {
-  console.log(payload);
+
   return {
     ...state,
     pickupaddress: payload,
   };
 });
 user.on(userdropLocatin, (state, payload) => {
-  console.log(payload);
+
   return {
     ...state,
     dropaddress: payload,
   };
 });
+
+user.on(userDropLatLong, (state, payload) => {
+  
+  return {
+    ...state,
+    droplatlong: payload,
+  };
+})
+user.on(userpickupLatLong, (state, payload) => {
+ 
+  return {
+    ...state,
+    pickuplatlong: payload,
+  };
+})

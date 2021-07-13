@@ -6,7 +6,7 @@ import NoAuthRoutes from './NoAuthRoutes';
 
 const Router: React.FC = () => {
   const isAuth = useSelector(getIsUserAuth);
-  console.log('isAuth == ', isAuth);
+
   return isAuth ? <AuthRoutes /> : <NoAuthRoutes />;
 };
 export default Router;

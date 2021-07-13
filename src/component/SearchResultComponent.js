@@ -1,6 +1,7 @@
 import React from 'react';
 import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
 import Location from 'react-native-vector-icons/EvilIcons';
+import Colors from '../module/utils/Colors';
 
 const SearchResultComponent = ({item,textPress}) => {
  const onResultPress =(item)=>{
@@ -23,7 +24,7 @@ const SearchResultComponent = ({item,textPress}) => {
         <Text numberOfLines={1} ellipsizeMode="tail" style={styles.resulttext}>
           {item.item.placeName}
         </Text>
-        <Text numberOfLines={1} ellipsizeMode="tail" style={styles.resulttext}>
+        <Text numberOfLines={1} ellipsizeMode="tail" style={styles.placeaddress}>
           {item.item.placeAddress}
         </Text>
       </View>
@@ -50,8 +51,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   resulttext: {
-    fontSize: 20,
-    color: '#38647d',
+    fontSize: 16,
+    color:Colors.sidbardbackgroundcolor,
     width: '95%',
   },
+  placeaddress:{
+    color:Colors.screentextColor,
+    
+  }
 });

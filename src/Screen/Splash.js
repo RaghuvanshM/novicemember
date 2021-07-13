@@ -31,10 +31,10 @@ const SplashScreen = () => {
     });
     setTimeout(() => {
       if(profile.user.isAuth) {
-        console.log(profile.user.isAuth)
-        navigation.navigate('BottomTab');
+    
+        navigation.navigate('DrawerNavigaion');
       } else {
-        console.log(profile.user.isAuth)
+   
         navigation.navigate('Confirmation');
       }
       setIsPopup(false);

@@ -11,10 +11,10 @@ export const signIn = function*(){
  
   try {
     const userDetails = yield call(signInApi);
-    console.log(userDetails);
+   
     // yield put(authUser(userDetails.data.data));
   } catch (e) {
-    console.log(e)
+
     // yield put(authFailed(e?.response?.data?.message));
     // Toast.show({
     //   type: 'error',

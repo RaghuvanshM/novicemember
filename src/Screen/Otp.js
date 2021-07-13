@@ -23,7 +23,7 @@ const OtpScreen = () => {
   const [otpverify, setOTP] = useState('');
   const navigation = useNavigation();
   const phonenumber = useSelector(getPhoneNumber);
-  console.log(phonenumber);
+
   const confirmVerificationCode = () => {
     if (phonenumber.otp == otpverify) {
       showMessage({

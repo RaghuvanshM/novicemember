@@ -3,7 +3,7 @@ import RegistrationScreen from '../src/Screen/Registration';
 import LoginScreen from '../src/Screen/Login'
 import HomeScreen from '../src/Screen/HomeScreen';
 import ProfileScreen from '../src/Screen/Profile';
-import BottomTabScreen from '../src/navigation/Bottom';
+import DrawerNavigation from './navigation/DrawerContent';
 import SplashScreen from '../src/Screen/Splash';
 import OtpScreen from '../src/Screen/OtpScreen';
 import OtpVerify from '../src/Screen/Otp';
@@ -16,7 +16,7 @@ export {
     LoginScreen,
     HomeScreen,
     ProfileScreen,
-    BottomTabScreen,
+    DrawerNavigation,
     SplashScreen,
     OtpScreen,
     OtpVerify,

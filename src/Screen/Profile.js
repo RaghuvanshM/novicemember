@@ -34,7 +34,7 @@ const Profile = () => {
       dispatch(signOutUser());
       navigation.navigate('Login');
     } catch (error) {
-      console.error(error);
+
     }
   };
   useEffect(()=>{

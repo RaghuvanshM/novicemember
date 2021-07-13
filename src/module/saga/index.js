@@ -3,7 +3,7 @@ import * as user from './user';
 import * as actions from '../actions';
 
 export default function* rootSaga() {
-  console.log('kjskvjkjfkajkjdfksa')
+
   // yield takeLatest(actions.getAirQualityIndex, airQuality.getAirQuality);
   yield takeLatest(actions.phoneAuth, user.signIn);
   // yield takeLatest(actions.getZoneDetails, zones.getZoneDetails);

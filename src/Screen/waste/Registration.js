@@ -85,7 +85,7 @@ class CabDetails extends Component {
             children_name: childrensname,
             children_age: childrensage,
         }
-        console.log(data)
+   
         await fetch(url, {
             method: 'POST',
             headers: {
@@ -96,7 +96,7 @@ class CabDetails extends Component {
             body: JSON.stringify(data)
         }).then(res => res.json())
             .then(res2 => {
-                console.log(res2)
+   
                 if (res2.response.status === 'true') {
                     showMessage({
                         message: res2.response.message,

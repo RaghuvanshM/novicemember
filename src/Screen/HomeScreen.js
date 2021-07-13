@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { Component, useEffect, useState, useCallback } from 'react';
 import {
   StyleSheet,
   View,
@@ -11,12 +11,17 @@ import { Marker } from 'react-native-maps';
 import Mapmyindia from 'mapmyindia-restapi-react-native-beta';
 import Geolocation from '@react-native-community/geolocation';
 import FontAwesomeicon from 'react-native-vector-icons/FontAwesome';
+import FontAwesomeNab from 'react-native-vector-icons/Fontisto'
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 import { userCurrntAddress } from '../module/actions';
 import { useSelector } from 'react-redux';
 import { getDropUpLocation, getPickUpLocation, getUserProfile } from '../module/selectors';
 import Button from '../component/Button/Button'
+import iconlist from '../module/utils/icon';
+import Colors from '../module/utils/Colors';
+import { color } from 'react-native-reanimated';
+import MapMarkerAutoZoom from '../component/MapComponent/MapMarker';
 Mapmyindia.setRestApiKey('zdjgknl2e9nzcw8q6rrcrhz1sctwokdn');
 Mapmyindia.setClientId(
   '33OkryzDZsL03Z-bBPJgzrb4MUJ2XpZbD9NtqVb90bUpjgubu-ZnRgkKvNRQDXVNJXw1wdt7oZZ-I2yMzeMq9nN4_VVedCvEtYf3Q6ThXUagSDZdLFYRZQ==',
@@ -38,6 +43,26 @@ const HomeScreen = () => {
   const [address, setAddress] = useState('');
   const [wish, setWish] = useState('');
   const navigation = useNavigation();
+  const [makers, setMarker] = useState([{
+    title: 'hello',
+    coordinates: {
+      latitude: 28.598810,
+      longitude: 77.309677,
+      latitudeDelta: 0.0122,
+      longitudeDelta: 0.0121,
+    },
+  },
+  {
+    title: 'hello',
+    coordinates: {
+      latitude:28.535517,
+      longitude:77.391029,
+      latitudeDelta: 0.0122,
+      longitudeDelta: 0.0121,
+    },
+  }])
+
+
   const dispatch = useDispatch()
   const profile = useSelector(getUserProfile)
   const pickAddress = useSelector(getPickUpLocation)
@@ -57,17 +82,17 @@ const HomeScreen = () => {
       })
       .catch(error => {
         const { code, message } = error;
-        console.warn(code, message);
+       
       });
   };
   useEffect(() => {
+
     Geolocation.getCurrentPosition(position => {
-      console.log(position);
       Mapmyindia.rev_geocode(
         { lat: position.coords.latitude, lng: position.coords.longitude },
         response => {
           if (response) {
-            console.log(response)
+         
             // this.setState({
             //     address: response.results[0].formatted_address,
             // });
@@ -92,23 +117,36 @@ const HomeScreen = () => {
     } else {
       setWish('GOOD EVENING');
     }
+
   }, []);
   const pressPickUpLocation = () => {
-    navigation.navigate('searchresultpage',{screen:'pickupsscreen'})
+    navigation.navigate('searchresultpage', { screen: 'pickupsscreen' })
   };
   const pressDropLocation = () => {
-    navigation.navigate('searchresultpage',{screen:'dropupscreen'})
+    navigation.navigate('searchresultpage', { screen: 'dropupscreen' })
   };
-  const onNextButtonPress =()=>{
-   navigation.navigate('cablistscreen')
+  const onNextButtonPress = () => {
+    navigation.navigate('cablistscreen')
+    // Mapmyindia.route_adv({ source: '28.111,77.111', destination: '28.22,77.22' }, (response) => {
+    //   console.log(response)
+    // });
   }
+
+
   return (
     <View style={styles.MainContainer}>
-      <View style={styles.upperview}>
-        <Text style={styles.label}>{wish}</Text>
-        <Text style={styles.label}>{profile.user.profile.givenName}</Text>
-        <View style={styles.bottomline} />
-      </View>
+      <MapMarkerAutoZoom
+        data={makers}
+      />
+      <TouchableOpacity style={styles.upperview}
+        onPress={() => { navigation.openDrawer() }}
+      >
+        <FontAwesomeNab
+          name={iconlist.navbaricon}
+          size={20}
+          style={{ marginLeft: '5%' }}
+        />
+      </TouchableOpacity>
       <View style={{ flex: 1 }} >
         <TouchableOpacity style={styles.searchview}
           onPress={() => { pressPickUpLocation() }}
@@ -117,50 +155,39 @@ const HomeScreen = () => {
             <Text numberOfLines={1} style={styles.pickuptext}>{pickAddress}</Text>}
           <FontAwesomeicon
             name="chevron-right"
-            color="#38647d"
-            size={25}
+            color={Colors.drawerscreentext}
+            size={20}
             style={{ marginTop: '2%', marginRight: '5%' }}
           />
         </TouchableOpacity>
         <TouchableOpacity style={styles.searchview}
-        onPress={pressDropLocation}
+          onPress={pressDropLocation}
         >
-         {dropAddress==''?<Text style={styles.pickuptext}>Select Drop Location</Text>:
-         <Text numberOfLines={1} style={styles.pickuptext}>{dropAddress}</Text>
-         }
+          {dropAddress == '' ? <Text style={styles.pickuptext}>Select Drop Location</Text> :
+            <Text numberOfLines={1} style={styles.pickuptext}>{dropAddress}</Text>
+          }
           <FontAwesomeicon
             name="chevron-right"
-            color="#38647d"
-            size={25}
+            color={Colors.drawerscreentext}
+            size={20}
             style={{ marginTop: '2%', marginRight: '5%' }}
           />
         </TouchableOpacity>
       </View>
       <View style={styles.mapviewstyle}>
-        <MapView
-          style={styles.mapStyle}
-          showsUserLocation={true}
-          zoomEnabled={true}
-          zoomControlEnabled={true}
-          initialRegion={{
-            latitude: 27.140221,
-            longitude: 81.961082,
-            latitudeDelta: 0.0122,
-            longitudeDelta: 0.0121,
-          }}>
-          <Marker
-            coordinate={{ latitude: 28.57966, longitude: 77.32111 }}
-            title={'Location'}
-            description={'Driver Location'}
-          />
-        </MapView>
+        <MapMarkerAutoZoom
+          data={makers}
+          mapStyle={styles.mapStyle}
+        />
       </View>
-     { dropAddress!='' && pickAddress!='' ?<Button
-        title={'Next'}
-        style={{ width: '70%', marginTop: '1%', marginBottom: '3%' }}
-        textStyle={styles.buttontext}
-        onPress={onNextButtonPress}
-      />:null}
+      {dropAddress != '' && pickAddress != '' ?
+        <View style={{ marginBottom: '3%' }}>
+          <Button
+            title={'Next'}
+
+            textStyle={styles.buttontext}
+            onPress={onNextButtonPress}
+          /></View> : null}
     </View>
   );
 };
@@ -214,7 +241,7 @@ const styles = StyleSheet.create({
   },
   pickuptext: {
     fontSize: 22,
-    color: '#38647d',
+    color: Colors.sidbardbackgroundcolor,
     marginLeft: '10%',
   },
   buttontext: {
