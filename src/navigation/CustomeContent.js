@@ -16,7 +16,7 @@ const CustomeContent = (props) => {
         <SafeAreaView style={{ flex: 1 }}>
 
             <Pressable style={{ flex: 0.3, backgroundColor: Colors.sidbardbackgroundcolor }}
-            onPress={()=>{alert('hello')}}
+            onPress={()=>{navigation.navigate('profilescreen')}}
             >
                 <View style={styles.nameview}>
                     <View style={styles.imageview}>
@@ -61,10 +61,7 @@ const CustomeContent = (props) => {
                 title={'Last booking'}
 
             />
-            <DrawerContentText
-                title={'Logout '}
-
-            />
+        
         </SafeAreaView>
     )
 }

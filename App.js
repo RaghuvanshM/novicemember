@@ -4,7 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { ConfirmationScreen, RegistrationScreen, LoginScreen, 
   DrawerNavigation,SplashScreen,OtpScreen, OtpVerify,SearchResultPage,
-   Cablist,RegistrationNext } 
+   Cablist,RegistrationNext, ProfileScreen } 
   from './src';
 import FlashMessage from "react-native-flash-message";
 import CabListScreen from './src/Screen/CabList';
@@ -24,7 +24,7 @@ export default function App() {
         <Stack.Screen name="searchresultpage" component={SearchResultPage} />
         <Stack.Screen name="cablistscreen" component={Cablist} />
         <Stack.Screen name="resistrationnext" component={RegistrationNext} />
-
+        <Stack.Screen name="profilescreen" component={ProfileScreen} />
       </Stack.Navigator>
       <FlashMessage position="bottom" duration={25000} />
     </NavigationContainer>

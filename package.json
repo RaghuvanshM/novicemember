@@ -23,6 +23,7 @@
     "@react-navigation/stack": "^5.14.4",
     "axios": "^0.21.1",
     "date-fns": "^2.21.3",
+    "mapmyindia-map-react-native-beta": "^0.1.0",
     "mapmyindia-restapi-react-native-beta": "0.0.12",
     "react": "17.0.1",
     "react-native": "0.64.1",

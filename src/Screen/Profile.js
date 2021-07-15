@@ -12,6 +12,8 @@ import Entypodesign from 'react-native-vector-icons/Entypo';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import {useNavigation} from '@react-navigation/native';
+import Iconlist from '../module/utils/icon'
+import ArrowLeft from 'react-native-vector-icons/AntDesign';
 
 import images from '../assets/images/image';
 import {getUserProfile} from '../../src/module/selectors';
@@ -20,6 +22,7 @@ import {
   GoogleSigninButton,
 } from '@react-native-google-signin/google-signin';
 import { signOutUser} from '../module/actions';
+import Colors from '../module/utils/Colors';
 // import { connect } from 'react-redux'
 const Profile = () => {
   const dispatch = useDispatch();
@@ -86,13 +89,13 @@ const Profile = () => {
             <TouchableOpacity style={{flexDirection: 'row'}} onPress={signOut}>
               <Entypodesign
                 name="log-out"
-                color="rgb(88, 166, 232)"
+                color={Colors.sidbardbackgroundcolor}
                 size={30}
               />
               <Text
                 style={{
                   fontSize: 20,
-                  color: 'rgb(88, 166, 232)',
+                  color: `${Colors.sidbardbackgroundcolor}`,
                   marginHorizontal: '2%',
                 }}>
                 Logout
@@ -104,8 +107,8 @@ const Profile = () => {
       <View style={styles.menuitem}>
         <MaterialIcon
           name="feedback"
-          color="rgb(88, 166, 232)"
-          size={30}
+          color={Colors.sidbardbackgroundcolor}
+          size={20}
           style={{padding: 20}}
         />
         <Text style={styles.feedbacktext}>Feedback</Text>
@@ -113,8 +116,8 @@ const Profile = () => {
       <View style={styles.menuitem}>
         <Feather
           name="phone"
-          color="rgb(88, 166, 232)"
-          size={30}
+          color={Colors.sidbardbackgroundcolor}
+          size={20}
           style={{padding: 20}}
         />
         <Text style={styles.feedbacktext}>Contact Us</Text>
@@ -122,8 +125,8 @@ const Profile = () => {
       <View style={styles.menuitem}>
         <Entypodesign
           name="help"
-          color="rgb(88, 166, 232)"
-          size={30}
+          color={Colors.sidbardbackgroundcolor}
+          size={20}
           style={{padding: 20}}
         />
         <Text style={styles.feedbacktext}>Help</Text>
@@ -131,8 +134,8 @@ const Profile = () => {
       <View style={styles.menuitem}>
         <MaterialIcon
           name="support"
-          color="rgb(88, 166, 232)"
-          size={30}
+          color={Colors.sidbardbackgroundcolor}
+          size={20}
           style={{padding: 20}}
         />
         <Text style={styles.feedbacktext}>Support</Text>
@@ -154,17 +157,17 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   nametext: {
-    fontSize: 20,
-    color: 'rgb(52 , 101 ,127)',
+    fontSize: 16,
+    color:Colors.sidbardbackgroundcolor,
     fontWeight: 'bold',
   },
   emailtext: {
-    fontSize: 18,
-    color: 'rgb(52 , 101 ,127)',
+    fontSize: 16,
+    color:Colors.sidbardbackgroundcolor,
   },
   feedbacktext: {
     fontSize: 20,
-    color: 'rgb(52 , 101 ,127)',
+    color:Colors.sidbardbackgroundcolor,
     marginLeft: 30,
     padding: 20,
   },

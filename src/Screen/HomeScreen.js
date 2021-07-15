@@ -29,6 +29,8 @@ Mapmyindia.setClientId(
 Mapmyindia.setClientSecret(
   'lrFxI-iSEg8ndsP7uuuRF9qAvS_LLzvkypAfjTIis5DbPmgmCBpScspI7b3W_icHkUqdfx4tVRUG-de5sT8GlrlBrEYpC2nhemjFVYfsHr7mZXh_i3BZMW6gzZXKC7df',
 );
+import  MapmyIndiaGL  from  'mapmyindia-map-react-native-beta';
+
 
 // Mapmyindia.setRestApiKey('fd71f2fca3ad037476a7e60578781332');
 // Mapmyindia.setClientId(
@@ -135,9 +137,14 @@ const HomeScreen = () => {
 
   return (
     <View style={styles.MainContainer}>
-      <MapMarkerAutoZoom
-        data={makers}
-      />
+    <MapmyIndiaGL.MapView style={{flex: 1}} styleURL={MapmyIndiaGL.StyleURL.Street} onPress={(event)=>this.onPress(event)}>
+          <MapmyIndiaGL.Camera
+            zoomLevel={12}
+          
+            centerCoordinate={makers.coordinates}
+          />
+        </MapmyIndiaGL.MapView>
+
       <TouchableOpacity style={styles.upperview}
         onPress={() => { navigation.openDrawer() }}
       >
