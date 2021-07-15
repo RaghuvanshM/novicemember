@@ -29,7 +29,7 @@ Mapmyindia.setClientId(
 Mapmyindia.setClientSecret(
   'lrFxI-iSEg8ndsP7uuuRF9qAvS_LLzvkypAfjTIis5DbPmgmCBpScspI7b3W_icHkUqdfx4tVRUG-de5sT8GlrlBrEYpC2nhemjFVYfsHr7mZXh_i3BZMW6gzZXKC7df',
 );
-import  MapmyIndiaGL  from  'mapmyindia-map-react-native-beta';
+import MapmyIndiaGL from 'mapmyindia-map-react-native-beta';
 
 
 // Mapmyindia.setRestApiKey('fd71f2fca3ad037476a7e60578781332');
@@ -57,8 +57,8 @@ const HomeScreen = () => {
   {
     title: 'hello',
     coordinates: {
-      latitude:28.535517,
-      longitude:77.391029,
+      latitude: 28.535517,
+      longitude: 77.391029,
       latitudeDelta: 0.0122,
       longitudeDelta: 0.0121,
     },
@@ -84,7 +84,7 @@ const HomeScreen = () => {
       })
       .catch(error => {
         const { code, message } = error;
-       
+
       });
   };
   useEffect(() => {
@@ -94,7 +94,7 @@ const HomeScreen = () => {
         { lat: position.coords.latitude, lng: position.coords.longitude },
         response => {
           if (response) {
-         
+
             // this.setState({
             //     address: response.results[0].formatted_address,
             // });
@@ -137,14 +137,6 @@ const HomeScreen = () => {
 
   return (
     <View style={styles.MainContainer}>
-    <MapmyIndiaGL.MapView style={{flex: 1}} styleURL={MapmyIndiaGL.StyleURL.Street} onPress={(event)=>this.onPress(event)}>
-          <MapmyIndiaGL.Camera
-            zoomLevel={12}
-          
-            centerCoordinate={makers.coordinates}
-          />
-        </MapmyIndiaGL.MapView>
-
       <TouchableOpacity style={styles.upperview}
         onPress={() => { navigation.openDrawer() }}
       >

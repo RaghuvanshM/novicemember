@@ -27,8 +27,8 @@ const Registration = () => {
         setDob(formattedDate)
         hideDatePicker();
     };
-   const onNextPress=()=>{
-       navigation.navigate('resistrationnext')
+    const onNextPress = () => {
+        navigation.navigate('resistrationnext')
     }
     return (
         <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
         color: 'white',
         alignSelf: 'center',
         fontWeight: 'bold',
-    
+
         justifyContent: 'center',
-      },
+    },
 })

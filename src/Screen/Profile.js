@@ -55,7 +55,14 @@ const Profile = () => {
         backgroundColor="white"
       />
       <View style={styles.headerText}>
-        <View style={{flexDirection: 'row', padding: '3%'}}>
+        <View style={{flexDirection: 'row', padding: '1%'}}>
+        <TouchableOpacity
+            style={{ flex: 0.2, alignSelf: 'center' }}
+            onPress={() => {
+              navigation.goBack();
+            }}>
+            <ArrowLeft name={Iconlist.arrowleft} size={30} />
+          </TouchableOpacity>
           {islogin ? (
             <View>
               {profile.user.isAuth ? (

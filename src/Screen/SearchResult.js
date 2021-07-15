@@ -81,7 +81,7 @@ const SearchResult = props => {
           <TouchableOpacity
             style={{ flex: 0.1, alignSelf: 'center' }}
             onPress={() => {
-              navigation.goBack();
+              navigation.navigate('DrawerNavigaion');
             }}>
             <ArrowLeft name={Iconlist.arrowleft} size={30} />
           </TouchableOpacity>
