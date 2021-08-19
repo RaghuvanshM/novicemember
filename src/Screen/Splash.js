@@ -7,39 +7,13 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import images from '../assets/images/image';
-import {useNavigation} from '@react-navigation/native';
-import {useSelector} from 'react-redux';
-import {getUserProfile} from '../module/selectors';
-import {
-  GoogleSignin,
-  GoogleSigninButton,
-} from '@react-native-google-signin/google-signin';
+
+
 const SplashScreen = () => {
-  const navigation = useNavigation();
-  const [isPopup, setIsPopup] = useState(false);
-  const profile = useSelector(getUserProfile);
-  useEffect(() => {
-    setTimeout(() => {
-      setIsPopup(true);
-    }, 1000);
-  }, []);
-  useEffect(() => {
-    GoogleSignin.configure({
-      webClientId:
-        '465592120377-s3fk75qls260d8gmpfjk4f1jusueva4d.apps.googleusercontent.com',
-      offlineAccess: true,
-    });
-    setTimeout(() => {
-      if(profile.user.isAuth) {
-    
-        navigation.navigate('DrawerNavigaion');
-      } else {
-   
-        navigation.navigate('Confirmation');
-      }
-      setIsPopup(false);
-    }, 5000);
-  }, []);
+ 
+  const [isPopup, setIsPopup] = useState(true);
+
+
   return (
     <View>
       <ImageBackground

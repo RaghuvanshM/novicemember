@@ -18,10 +18,10 @@ const Confirmation = () => {
   }, []);
   const onSignUpPress = () => {
 
-    navigation.navigate('OtpSceen');
+    navigation.navigate('otpscreen');
   };
   const onSigninPress = () => {
-    navigation.navigate('Login');
+    navigation.navigate('login');
   };
   return (
     <View style={{ flex: 1, justifyContent: 'center' }}>

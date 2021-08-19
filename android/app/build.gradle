@@ -202,8 +202,8 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:27.0.0')  // From node_modules
     implementation project(':react-native-maps')  
     implementation project(':react-native-community-geolocation')
-    compile project(':react-native-vector-icons')
-    compile project(':mapmyindia-restapi-react-native-beta')
+    implementation project(':react-native-vector-icons')
+    implementation project(':mapmyindia-restapi-react-native-beta')
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {

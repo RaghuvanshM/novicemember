@@ -4,11 +4,15 @@ import {
   signOutUser,
   sendOtp,
   userCurrntAddress,
-
+  
   userpickupLocation,
   userdropLocatin,
   userDropLatLong,
   userpickupLatLong,
+  loginFailed,
+  loginSuccess,
+  loginButtonPress,
+  removeButtonPress,
 } from '../actions';
 
 const initialState = {
@@ -19,15 +23,18 @@ const initialState = {
   pickupaddress: '',
   dropaddress: '',
   pickuplatlong:0,
-  droplatlong:0
+  droplatlong:0,
+  isButtonCLick:false
 };
 
 export const user = createReducer({}, initialState);
-user.on(authUser, (state, payload) => {
+user.on(loginSuccess, (state, payload) => {
+
   return {
     ...state,
     isAuth: true,
     profile: payload,
+    isButtonCLick:false
   };
 });
 user.on(signOutUser, state => {
@@ -38,46 +45,29 @@ user.on(signOutUser, state => {
     profile: '',
   };
 });
+
+user.on(loginFailed,(state,payload)=>{
+  return {
+    ...state,
+    isAuth:false,
+    isButtonCLick:false
+  }
+})
+user.on(loginButtonPress,(state)=>{
+  return {
+    ...state,
+    isButtonCLick:true
+  }
+})
 user.on(sendOtp, (state, payload) => {
   return {
     ...state,
     phonenumber: payload,
   };
 });
-user.on(userCurrntAddress, (state, payload) => {
-
+user.on(removeButtonPress, (state, payload) => {
   return {
     ...state,
-    currentAddress: payload,
-    pickupaddress:payload
+    isButtonCLick:false
   };
 });
-user.on(userpickupLocation, (state, payload) => {
-
-  return {
-    ...state,
-    pickupaddress: payload,
-  };
-});
-user.on(userdropLocatin, (state, payload) => {
-
-  return {
-    ...state,
-    dropaddress: payload,
-  };
-});
-
-user.on(userDropLatLong, (state, payload) => {
-  
-  return {
-    ...state,
-    droplatlong: payload,
-  };
-})
-user.on(userpickupLatLong, (state, payload) => {
- 
-  return {
-    ...state,
-    pickuplatlong: payload,
-  };
-})

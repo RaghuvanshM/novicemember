@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import {
   Text,
   View,
@@ -19,11 +19,15 @@ import Colors from '../module/utils/Colors';
 import CustomTextInput from '../component/TextInput/OtpBox';
 import CustomTextBoxLabel from '../component/Label/TextBoxLabel';
 import CutomButton from '../component/Button/Button';
-const OtpScreen = () => {
+import auth from '@react-native-firebase/auth';
+const OtpScreen = (props) => {
   const [otpverify, setOTP] = useState('');
   const navigation = useNavigation();
   const phonenumber = useSelector(getPhoneNumber);
 
+  useEffect(()=>{
+console.log(props.route.params)
+  },[])
   const confirmVerificationCode = () => {
     if (phonenumber.otp == otpverify) {
       showMessage({
@@ -74,7 +78,7 @@ const OtpScreen = () => {
         <View>
           <CutomButton title={'Submit'} 
           textStyle={styles.buttontext}
-          onPress={()=>{navigation.navigate('Registration')}}
+          // onPress={()=>{navigation.navigate('registration')}}
 
           />
         </View>

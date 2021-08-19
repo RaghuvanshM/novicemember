@@ -50,19 +50,19 @@ class AddReatiler extends Component {
   
          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
              this._getCurrentLocation()
-             console.log("Location permission granted")
+         
          } else {
-             console.log("Location permission denied")
+     
          }
       } catch (err) {
          console.warn(err)
       }
   }
   _getCurrentLocation = () =>{
-    console.log('this is for access location')
+
     Geolocation.getCurrentPosition(
        (position) => {
-         console.log(position)
+     
        this.setState({
           latitude: position.coords.latitude,
           longitude: position.coords.longitude, 
@@ -95,7 +95,7 @@ class AddReatiler extends Component {
   }
   onpressCurrentLocation = () => {
     Geolocation.getCurrentPosition((position) => {
-      console.log(position)
+  
       Mapmyindia.rev_geocode(
         {lat: position.coords.latitude, lng: position.coords.longitude},
         (response) => {

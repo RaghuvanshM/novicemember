@@ -8,3 +8,10 @@ export const userpickupLocation = createAction();
 export const userdropLocatin = createAction();
 export const userpickupLatLong = createAction()
 export const userDropLatLong = createAction()
+export const pickupAddToLatLong =createAction()
+export const dropAddToLatLong =createAction()
+export const loginFailed = createAction()
+export const loginSuccess = createAction()
+export const loginButtonPress = createAction()
+export const removeButtonPress = createAction()
+

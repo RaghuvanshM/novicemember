@@ -1,0 +1,1 @@
+export const getNearByDriver = (state)=>state.alldriver.driverArray;

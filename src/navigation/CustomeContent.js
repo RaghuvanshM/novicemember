@@ -11,6 +11,7 @@ import { getUserProfile } from '../module/selectors';
 const CustomeContent = (props) => {
     const navigation = useNavigation();
     const profile = useSelector(getUserProfile);
+  
    
     return (
         <SafeAreaView style={{ flex: 1 }}>

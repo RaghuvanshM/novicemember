@@ -21,51 +21,127 @@ import CustomTextBoxLabel from '../component/Label/TextBoxLabel'
 import CutomButton from '../component/Button/Button';
 import images from '../assets/images/image';
 import Colors from '../module/utils/Colors';
+import auth from '@react-native-firebase/auth';
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
-const OtpScreen = () => {
-  const dispatch = useDispatch();
-  const navigation = useNavigation();
-  const [phone, setPhone] = useState('');
+
+
+const PhoneSignIn = () => {
+  // If null, no SMS has been sent
+  const navigation = useNavigation()
+  const [confirm, setConfirm] = useState(null);
+  const [code, setCode] = useState('');
+  const [phone, setPhone] = useState('')
+  // Handle the button press
+  async function signInWithPhoneNumber() {
+    try {
+      const confirmation = await auth().signInWithPhoneNumber(`+91 ${phone}`);
+      console.log(confirmation)
+      setConfirm(confirmation);
+    }
+    catch (e) {
+      console.log(e)
+    }
+  }
+
+  async function confirmCode() {
+    try {
+      await confirm.confirm(code);
+
+    } catch (error) {
+      console.log('Invalid code.');
+    }
+  }
   useEffect(() => {
-    dispatch(phoneAuth);
-  }, [dispatch]);
+    console.log(confirm)
 
-  const validatePhone = () => {
-    return Appconstant.phoneregx.test(phone);
-  };
-  const sendOtpbuttoncall = async () => {
-    navigation.navigate('Otpverify')
-    // try {
-    //   if (validatePhone()) {
-    //     var val = await Math.floor(1000 + Math.random() * 9000);
+  })
+  if (!confirm) {
+    return (
+      <View style={styles.container}>
+        <ArrowleftICON />
+        <KeyboardAwareScrollView
+          contentContainerStyle={styles.keyboardAvoidingContainer}
+          showsVerticalScrollIndicator={false}
+          bounces={false}
 
-    //     const url = `http://2factor.in/API/V1/fce9a032-d8c4-11eb-8089-0200cd936042/SMS/${phone}/${val}`;
-    //     await fetch(url, {
-    //       method: 'GET',
-    //       headers: {
-    //         'Content-Type': 'application/json',
-    //       },
-    //     })
-    //       .then(res => res.json())
-    //       .then(res2 => {
-    //         console.log(res2.Status === 'Success');
-    //         if (res2.Status === 'Success') {
-    //           navigation.navigate('Otpverify');
-    //           let data = {phonenumber: phone, otp: val};
-    //           dispatch(sendOtp(data));
-    //         }
-    //       });
-    //   } else {
-    //     navigation.navigate('Otpverify');
+          keyboardShouldPersistTaps={'always'}
+          enableOnAndroid={true}
+        >
+          <PhoneIMage />
+          <Text style={styles.mobiletext}>Enter Your Mobile Number</Text>
+          <Text style={styles.otpText}>We will send you a OTP Verification</Text>
+          <View style={{ width: '90%', alignSelf: 'center', margin: '2%' }}>
+            <CustomTextBoxLabel
+              label={'Enter Mobile Number'}
+            />
 
-    //   }
-    // } catch (e) {
-    //   console.log(e);
-    // }
-  };
+          </View>
+          <CustomTextInput
+            placeholder={'Phone Number'}
+            keyboardType={'number-pad'}
+            onChangeText={text => setPhone(text)}
+          />
+          <CutomButton
+            title={'Send'}
+            onPress={signInWithPhoneNumber}
+            textStyle={styles.buttontext}
+
+          />
+        </KeyboardAwareScrollView>
+      </View>
+    );
+  }
+
   return (
-    <ScrollView contentContainerStyle ={{ flexGrow: 1, justifyContent: 'center' }}>
-      <TouchableOpacity style={{ flex: 0.3 }}
+    <>
+      <View style={styles.container}>
+        <ArrowleftICON />
+        <KeyboardAwareScrollView
+          contentContainerStyle={styles.keyboardAvoidingContainer}
+          showsVerticalScrollIndicator={false}
+          bounces={false}
+
+          keyboardShouldPersistTaps={'always'}
+          enableOnAndroid={true}
+        >
+          <PhoneIMage />
+          <Text style={styles.mobiletext}>OTP VERIFICATION</Text>
+          <Text style={styles.otpText}>Enter OTP sent to +917895769455</Text>
+          <View style={{ width: '90%', alignSelf: 'center', margin: '2%' }}>
+            <CustomTextBoxLabel
+              label={'Enter Otp'}
+            />
+
+          </View>
+          <CustomTextInput
+            placeholder={'Otp'}
+            keyboardType={'number-pad'}
+            onChangeText={text => setCode(text)}
+          />
+          <CutomButton
+            title={'Verify'}
+            textStyle={styles.buttontext}
+            onPress={confirmCode}
+
+          />
+          <View style={{ flexDirection: 'row', justifyContent: 'center', margin: '5%' }}>
+            <Text style={styles.otpText}>Didn't receive the OTP ?</Text>
+            <TouchableOpacity><Text style={styles.resendotp}>Resend OTP </Text></TouchableOpacity>
+          </View>
+        </KeyboardAwareScrollView>
+      </View>
+    </>
+  );
+}
+export default PhoneSignIn
+
+
+
+const ArrowleftICON = () => {
+  return (
+    <View>
+      <TouchableOpacity
         onPress={() => { navigation.goBack() }}
       >
         <Icon
@@ -74,39 +150,21 @@ const OtpScreen = () => {
           style={{ margin: '4%' }}
         />
       </TouchableOpacity>
-      <View
-    style={{flex:1,justifyContent:'center',alignItems:'center'}}
-      >
-        <Image
-          source={images.mobilephone}
-          resizeMode='contain'
-          style={{height:'40%',width:'90%'}}
-        />
-        <Text style={styles.mobiletext}>Enter Your Mobile Number</Text>
-        <Text style={styles.otpText}>We will send you a OTP Verification</Text>
-      </View>
-      <View style={{ flex: 1 }}>
-        <View style={{ width: '90%', alignSelf: 'center' }}>
-          <CustomTextBoxLabel
-            label={'Enter Mobile Number'}
-          />
-        </View>
-        <CustomTextInput
-          placeholder={'Phone Number'}
-          keyboardType={'number-pad'}
-        />
-        <View>
-          <CutomButton
-            title={'Send'}
-            textStyle={styles.buttontext}
-            onPress={sendOtpbuttoncall}
-          />
-        </View>
-      </View>
-    </ScrollView>
-  );
-};
-export default OtpScreen;
+    </View>
+  )
+}
+
+const PhoneIMage = () => {
+  return (
+    <Image
+      source={images.mobilephone}
+      resizeMode='contain'
+      style={{ height: 70, width: 70, alignSelf: 'center' }}
+    />
+  )
+}
+
+
 const styles = StyleSheet.create({
   singletextinput: {
     width: '95%',
@@ -131,15 +189,29 @@ const styles = StyleSheet.create({
 
     justifyContent: 'center',
   },
-  mobiletext:{
-    fontSize:18,
-    fontFamily:'OpenSans-Light',
-    margin:'2%'
+  mobiletext: {
+    fontSize: 16,
+    fontFamily: 'OpenSans-Light',
+    margin: '2%',
+    alignSelf: 'center'
   },
-  otpText:{
-    fontSize: 18,
+  otpText: {
+    fontSize: 14,
     color: Colors.forgetPassowrdcolor,
+    fontFamily: 'OpenSans-Bold',
+    alignSelf: 'center'
+  },
+  container: {
+    flex: 1
+  },
+  keyboardAvoidingContainer: {
+    flexGrow: 1,
+    justifyContent: 'center'
+  },
+  resendotp: {
+    fontSize: 14,
+    color: Colors.resesttTextColor,
     fontFamily: 'OpenSans-Bold'
   }
-  
+
 });

@@ -1,254 +1,251 @@
-import React, { Component, useEffect, useState, useCallback } from 'react';
+import React, { Component, useEffect, useState, useRef } from 'react';
 import {
   StyleSheet,
   View,
   Text,
   StatusBar,
   TouchableOpacity,
+  Dimensions,
+  Animated,
+  Pressable,
+  Image
+
 } from 'react-native';
 import MapView from 'react-native-maps';
 import { Marker } from 'react-native-maps';
-import Mapmyindia from 'mapmyindia-restapi-react-native-beta';
 import Geolocation from '@react-native-community/geolocation';
 import FontAwesomeicon from 'react-native-vector-icons/FontAwesome';
 import FontAwesomeNab from 'react-native-vector-icons/Fontisto'
-import { useNavigation } from '@react-navigation/native';
+import CurrenLocation from 'react-native-vector-icons/Ionicons'
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
-import { userCurrntAddress } from '../module/actions';
+import { pickupLatLong, dropuLatLong, convertLatlng, dropAddress, getAllDriver } from '../module/actions';
 import { useSelector } from 'react-redux';
-import { getDropUpLocation, getPickUpLocation, getUserProfile } from '../module/selectors';
+import { getDropLocation, getDropupAddress, getNearByDriver, getPickupAddress, getPickUpLocation, getUserProfile } from '../module/selectors';
 import Button from '../component/Button/Button'
 import iconlist from '../module/utils/icon';
 import Colors from '../module/utils/Colors';
-import { color } from 'react-native-reanimated';
-import MapMarkerAutoZoom from '../component/MapComponent/MapMarker';
-Mapmyindia.setRestApiKey('zdjgknl2e9nzcw8q6rrcrhz1sctwokdn');
-Mapmyindia.setClientId(
-  '33OkryzDZsL03Z-bBPJgzrb4MUJ2XpZbD9NtqVb90bUpjgubu-ZnRgkKvNRQDXVNJXw1wdt7oZZ-I2yMzeMq9nN4_VVedCvEtYf3Q6ThXUagSDZdLFYRZQ==',
-);
-Mapmyindia.setClientSecret(
-  'lrFxI-iSEg8ndsP7uuuRF9qAvS_LLzvkypAfjTIis5DbPmgmCBpScspI7b3W_icHkUqdfx4tVRUG-de5sT8GlrlBrEYpC2nhemjFVYfsHr7mZXh_i3BZMW6gzZXKC7df',
-);
-import MapmyIndiaGL from 'mapmyindia-map-react-native-beta';
-
-
-// Mapmyindia.setRestApiKey('fd71f2fca3ad037476a7e60578781332');
-// Mapmyindia.setClientId(
-//   '33OkryzDZsIhmErSxmwo58fYiIPy0ygR_1sgZKUrqYvvfHKs1tL6EObMcTN2e1amwNd8-pcmwIS52ZDRd9EVARux6jIw5r6y',
-// );
-// Mapmyindia.setClientSecret(
-//   'lrFxI-iSEg_xbuuT88UEo2qJJrev19WqYysM1FJnjkY4fJnudZLaENHwlm1N4R1h0l4Cg-dk9nxEty4TNRtkuKDNc5BYddkw6Uhn7v3cHCA='
-// );
+import SliderScreen from '../component/slider/slider';
+import images from '../assets/images/image';
+import AppIntroSlider from 'react-native-app-intro-slider';
+const { height, width } = Dimensions.get('screen')
 const HomeScreen = () => {
-  const [currentlat, setCurrentLat] = useState(0);
-  const [currentlong, setCurrentLong] = useState(0);
-  const [address, setAddress] = useState('');
-  const [wish, setWish] = useState('');
-  const navigation = useNavigation();
-  const [makers, setMarker] = useState([{
-    title: 'hello',
-    coordinates: {
-      latitude: 28.598810,
-      longitude: 77.309677,
-      latitudeDelta: 0.0122,
-      longitudeDelta: 0.0121,
-    },
-  },
-  {
-    title: 'hello',
-    coordinates: {
-      latitude: 28.535517,
-      longitude: 77.391029,
-      latitudeDelta: 0.0122,
-      longitudeDelta: 0.0121,
-    },
-  }])
+  const [pickup, setPickup] = useState('')
+  const [dropup, setDropup] = useState('')
+  const isfocused = useIsFocused()
 
-
+  const [animateValue] = useState(new Animated.Value(0))
+  const [lat, setLat] = useState(28.579660)
+  const [lng, setLng] = useState(77.321110)
   const dispatch = useDispatch()
+  const navigation = useNavigation()
+  const pickupAddress = useSelector(getPickupAddress)
+  const dropUpAddress = useSelector(getDropupAddress)
+  const origin = useSelector(getPickUpLocation)
+  const destination = useSelector(getDropLocation)
   const profile = useSelector(getUserProfile)
-  const pickAddress = useSelector(getPickUpLocation)
-  const dropAddress = useSelector(getDropUpLocation)
+  const [id_user] = useState(profile.id_user)
+  const listofdriver = useSelector(getNearByDriver)
+  const mapRef = useRef();
+
   const getlocation = async () => {
-    await GetLocation.getCurrentPosition({
-      enableHighAccuracy: true,
-    })
-      .then(location => {
-        // this.setState({
-        //     currentlat: location.latitude,
-        //     currentlong: location.longitude
-
-        // })
-        setCurrentLat(currentlat);
-        setCurrentLong(currentlong);
-      })
-      .catch(error => {
-        const { code, message } = error;
-
-      });
-  };
-  useEffect(() => {
-
-    Geolocation.getCurrentPosition(position => {
-      Mapmyindia.rev_geocode(
-        { lat: position.coords.latitude, lng: position.coords.longitude },
-        response => {
-          if (response) {
-
-            // this.setState({
-            //     address: response.results[0].formatted_address,
-            // });
-            setAddress(response.results[0].formatted_address);
-            dispatch(userCurrntAddress(response.results[0].formatted_address))
-          } else {
-            // this.setState({
-            //     isAddressMOdalvisiable: true,
-            //     formatted_address: 'No Address found'
-            // });
-          }
-        },
-      );
+    await Geolocation.getCurrentPosition(info => {
+      setLat(info.coords.latitude)
+      setLng(info.coords.longitude)
+      dispatch(pickupLatLong({ lat: info.coords.latitude, lng: info.coords.longitude }))
+      dispatch(convertLatlng({ lat: info.coords.latitude, long: info.coords.longitude }))
     });
-    var today = new Date();
-    var curHr = today.getHours();
+  };
 
-    if (curHr < 12) {
-      setWish('GOOD MORNING');
-    } else if (curHr < 18) {
-      setWish('GOOD AFTERNOON');
-    } else {
-      setWish('GOOD EVENING');
-    }
-
-  }, []);
   const pressPickUpLocation = () => {
-    navigation.navigate('searchresultpage', { screen: 'pickupsscreen' })
-  };
-  const pressDropLocation = () => {
-    navigation.navigate('searchresultpage', { screen: 'dropupscreen' })
-  };
-  const onNextButtonPress = () => {
-    navigation.navigate('cablistscreen')
-    // Mapmyindia.route_adv({ source: '28.111,77.111', destination: '28.22,77.22' }, (response) => {
-    //   console.log(response)
-    // });
+    navigation.navigate('searchresultpage')
+  }
+  const moveview = () => {
+    Animated.timing(animateValue, {
+      toValue: 0,
+      duration: 100,
+      useNativeDriver: false
+    }).start()
+    navigation.navigate('pickulocatioin')
+  }
+  useEffect(() => {
+    dispatch(getAllDriver({ id_user, pickup_lat: 24.7654, pickup_long: 74.345778 }))
+    getlocation()
+    Animated.timing(animateValue, {
+      toValue: 1,
+      duration: 1000,
+      useNativeDriver: false
+    }).start()
+    dispatch(dropAddress(''))
+  }, [])
+  useEffect(() => {
+    if (isfocused) {
+      
+      Animated.timing(animateValue, {
+        toValue: 1,
+        duration: 1000,
+        useNativeDriver: false
+      }).start()
+
+    } else {
+      
+      Animated.timing(animateValue, {
+        toValue: 0,
+        duration: 100,
+        useNativeDriver: false
+      }).start()
+    }
+  }, [isfocused])
+  const destinationPress = () => {
+    Animated.timing(animateValue, {
+      toValue: 0,
+      duration: 100,
+      useNativeDriver: false
+    }).start()
+    navigation.navigate('destination')
   }
 
+  const DEFAULT_PADDING = { top: 60, right: 60, bottom: 60, left: 60 };
 
+  const fitAllMarkers = () => {
+    mapRef.current.fitToCoordinates(listofdriver, {
+      edgePadding: DEFAULT_PADDING,
+      animated: true,
+    });
+  }
   return (
-    <View style={styles.MainContainer}>
-      <TouchableOpacity style={styles.upperview}
-        onPress={() => { navigation.openDrawer() }}
+    <>
+
+
+      <View style={styles.currentlocationview}>
+        <View style={{ flex: 0.2, justifyContent: 'center', alignItems: 'center' }}>
+          <TouchableOpacity style={styles.upperview}
+            onPress={() => { navigation.openDrawer() }}
+          >
+            <FontAwesomeNab
+              name={iconlist.navbaricon}
+              size={16}
+              style={{ marginLeft: '5%' }}
+            />
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity style={{ flex: 1, justifyContent: 'center', marginRight: 20 }}
+          onPress={() => { moveview() }}
+        >
+          <Text numberOfLines={1}>
+            {pickupAddress}
+          </Text>
+        </TouchableOpacity>
+      </View>
+      <MapView
+        style={{ flex: 1 }}
+        ref={mapRef}
+        onMapReady={() => { fitAllMarkers() }}
+        showsUserLocation={false}
+        zoomEnabled={true}
+        zoomControlEnabled={true}
+        onPanDrag={() => { moveview() }}
+        initialRegion={{
+          latitude: lat,
+          longitude: lng,
+          latitudeDelta: 0.0122,
+          longitudeDelta: 0.0421,
+        }}>
+
+        {listofdriver && listofdriver.map((marker, i) => (
+          <Marker key={i} identifier={`id${i}`} coordinate={marker}
+
+          >
+
+          </Marker>
+        ))}
+        <Marker
+          coordinate={{ latitude: lat, longitude: lng }}
+          title={"JavaTpoint"}
+          description={"Java Training Institute"}
+        />
+        {/* {listofdriver && listofdriver.map((a)=>{
+ <Marker
+ coordinate={{ latitude: lat, longitude: lng }}
+ title={"JavaTpoint"}
+ description={"Java Training Institute"}
+/>
+})} */}
+
+      </MapView>
+      <Animated.View style={{ ...styles.bottomview, flex: animateValue }}>
+
+        <Pressable style={styles.searchbarstyle}
+          onPress={() => { destinationPress() }}
+        >
+          <FontAwesomeicon
+            size={20}
+            name={'search'}
+            style={{ marginHorizontal: 10 }}
+          />
+          <Text style={styles.destinationText}>Search Destination</Text>
+        </Pressable>
+        <View style={{
+          marginTop: 60, 
+          flex:1
+        
+        }}
+
+        >
+        <SliderScreen />
+        </View>
+      </Animated.View>
+      <TouchableOpacity style={{
+        height: 50, width: 50, backgroundColor: 'white',
+        position: 'absolute', top: height / 4, left: width * 0.85,
+        borderRadius: 30,
+        elevation: 5,
+        justifyContent: 'center',
+        alignItems: 'center'
+      }}
+        onPress={() => fitAllMarkers()}
       >
-        <FontAwesomeNab
-          name={iconlist.navbaricon}
-          size={20}
-          style={{ marginLeft: '5%' }}
+        <CurrenLocation
+          name={'locate-outline'}
+          size={30}
         />
       </TouchableOpacity>
-      <View style={{ flex: 1 }} >
-        <TouchableOpacity style={styles.searchview}
-          onPress={() => { pressPickUpLocation() }}
-        >
-          {pickAddress == '' ? <Text style={styles.pickuptext}>Select PickUp Location</Text> :
-            <Text numberOfLines={1} style={styles.pickuptext}>{pickAddress}</Text>}
-          <FontAwesomeicon
-            name="chevron-right"
-            color={Colors.drawerscreentext}
-            size={20}
-            style={{ marginTop: '2%', marginRight: '5%' }}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.searchview}
-          onPress={pressDropLocation}
-        >
-          {dropAddress == '' ? <Text style={styles.pickuptext}>Select Drop Location</Text> :
-            <Text numberOfLines={1} style={styles.pickuptext}>{dropAddress}</Text>
-          }
-          <FontAwesomeicon
-            name="chevron-right"
-            color={Colors.drawerscreentext}
-            size={20}
-            style={{ marginTop: '2%', marginRight: '5%' }}
-          />
-        </TouchableOpacity>
-      </View>
-      <View style={styles.mapviewstyle}>
-        <MapMarkerAutoZoom
-          data={makers}
-          mapStyle={styles.mapStyle}
-        />
-      </View>
-      {dropAddress != '' && pickAddress != '' ?
-        <View style={{ marginBottom: '3%' }}>
-          <Button
-            title={'Next'}
+    </>
+  )
+}
+export default HomeScreen
 
-            textStyle={styles.buttontext}
-            onPress={onNextButtonPress}
-          /></View> : null}
-    </View>
-  );
-};
-
-export default HomeScreen;
 const styles = StyleSheet.create({
-  MainContainer: {
-    flex: 1,
+  currentlocationview: {
+    height: 50,
+    width: width * 0.9,
     backgroundColor: 'white',
-  },
-  mapStyle: {
-    height: '90%',
-    width: '90%',
     alignSelf: 'center',
-    justifyContent: 'center',
-  },
-  mapviewstyle: {
-    flex: 2,
-  },
-  innermapview: {
-    // elevation:2,
-    // backgroundColor:'green',
-    // height:'90%',
-    // width:'80%',
-  },
-  label: {
-    fontSize: 20,
-    color: '#38647d',
-    fontWeight: 'bold',
-    marginLeft: '5%',
-  },
-  upperview: {
-    flex: 0.4,
-    marginTop: StatusBar.currentHeight,
-  },
-  bottomline: {
-    borderBottomWidth: 3,
-    marginTop: '4%',
-    borderBottomColor: '#38647d',
-  },
-  searchview: {
-    backgroundColor: '#e0e0e0',
-    flex: 0.4,
-    width: '90%',
-    alignSelf: 'center',
-    alignItems: 'center',
-    justifyContent: 'center',
+    marginTop: 20,
+    borderRadius: 10,
+    elevation: 5,
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    margin: '2%'
   },
-  pickuptext: {
-    fontSize: 22,
-    color: Colors.sidbardbackgroundcolor,
-    marginLeft: '10%',
-  },
-  buttontext: {
-    fontSize: 20,
-    color: 'white',
-    alignSelf: 'center',
-    fontWeight: 'bold',
+  bottomview: {
 
-    justifyContent: 'center',
+    backgroundColor: 'white',
+    elevation: 5,
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20
+
   },
-});
+  animatedcircle: { height: 100, width: 100, borderRadius: 50, backgroundColor: 'red' },
+  searchbarstyle: {
+    width: width * 0.9,
+    backgroundColor: '#f3f5f4',
+    alignSelf: 'center',
+    padding: 15,
+    marginTop: 20,
+    borderRadius: 6,
+    flexDirection: 'row'
+  },
+  destinationText: {
+    fontSize: 20
+  }
+
+})

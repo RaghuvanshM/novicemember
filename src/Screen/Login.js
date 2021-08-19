@@ -1,71 +1,43 @@
 import React, { Component, useEffect, useState } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, Button, Image, ScrollView } from 'react-native';
-import { showMessage, hideMessage } from 'react-native-flash-message';
+import { Text, View, StyleSheet, TouchableOpacity, Button, Image, ScrollView,ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/AntDesign';
-import { api } from '../component/Constant/api';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
+
 import {
   GoogleSignin,
   GoogleSigninButton,
 } from '@react-native-google-signin/google-signin';
-import { useDispatch } from 'react-redux';
-import { authUser } from '../module/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { authUser, loginButtonPress, removeButtonPress } from '../module/actions';
 import CutomButton from '../component/Button/Button';
 import CustomTextInput from '../component/TextInput/TextBox';
 import CustomTextBoxLabel from '../component/Label/TextBoxLabel'
 import Colors from '../module/utils/Colors';
 import Iconlist from '../module/utils/icon'
 import images from '../assets/images/image';
+import { getIsButtonCLick } from '../module/selectors/user';
 const LoginScreen = ({ props }) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const loginButtonClick = async () => {
-    const url = `${api}/memberlogin`;
-    let data = {
-      email,
-      password,
-      current_lat: 28.9087,
-      current_lat: 70.393983,
-    };
-  
-    await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': 'prabhat@cab',
-      },
-      credentials: 'include',
-      body: JSON.stringify(data),
-    })
-      .then(res => res.json())
-      .then(res2 => {
+  const isbuttonclick = useSelector(getIsButtonCLick)
 
-        if (res2.response.status === 'true') {
-          showMessage({
-            message: res2.response.message,
-            type: 'success',
-          });
-          AsyncStorage.setItem('Driverid', res2.data.uid.toString());
-        } else {
-          showMessage({
-            message: res2.response.message,
-            type: 'single line',
-          });
-          navigation.navigate('BottomTab');
-        }
-      });
+  const loginButtonClick = async () => {
+    dispatch(loginButtonPress())
+    dispatch(authUser({email,password}))
   };
   useEffect(() => {
+  dispatch(removeButtonPress())
     GoogleSignin.configure({
       webClientId:
-        '465592120377-s3fk75qls260d8gmpfjk4f1jusueva4d.apps.googleusercontent.com',
+        '470668762963-a0m9hsdob83m1folnhku0av4mrbj33jg.apps.googleusercontent.com',
+        
       offlineAccess: true,
     });
   }, []);
@@ -75,58 +47,25 @@ const LoginScreen = ({ props }) => {
       await GoogleSignin.hasPlayServices();
       const userinfo = await GoogleSignin.signIn();
       dispatch(authUser(userinfo.user));
-      navigation.navigate('DrawerNavigaion');
     } catch (error) {
+    
      
     }
   };
 
   return (
-    // <View style={styles.loginview}>
-
-    //   <TouchableOpacity
-    //     onPress={() => {
-    //       navigation.goBack();
-    //     }}>
-    //     <View style={{padding: 10}}>
-    //       <Icon name="arrowleft" size={30} color="black" />
-    //     </View>
-    //   </TouchableOpacity>
-    //   <Text style={{fontSize: 20, alignSelf: 'center', color: '#343a40'}}>
-    //     {' '}
-    //     Member Login{' '}
-    //   </Text>
-    //   <CustomTextInput />
-    //   <View style={styles.loginview}>
-    //     <View style={styles.singletextinput}>
-    //       <TextInput
-    //         label="Email"
-    //         onChangeText={text => {
-    //           setEmail(text);
-    //         }}
-    //       />
-    //     </View>
-
-    //     <View style={styles.singletextinput}>
-    //       <TextInput
-    //         label="Password"
-    //         onChangeText={text => {
-    //           setPassword(text);
-    //         }}
-    //       />
-    //     </View>
-    //     {/* <TouchableOpacity
-    //       onPress={loginButtonClick}
-    //       >
-    //         <LinearGradient
-    //           colors={['#e83e8c', '#e83e8c', '#e83e8c']}
-    //           style={styles.linearGradient}>
-    //           <Text style={styles.buttonText}>Login Now</Text>
-    //         </LinearGradient>
-    //       </TouchableOpacity> *parrentloginiamgetton.Color.Dark}
-    //     />
-    //   </View>
-    // </View>
+  <>
+    {isbuttonclick && <View
+                style={{
+                    position: 'absolute',
+                    width: '100%',
+                    height: '100%',
+                    justifyContent: 'center',
+                    backgroundColor: 'rgba(3,3,3, 0.8)',
+                    zIndex: 5,
+                }}>
+                <ActivityIndicator size="large" color="#fff" />
+            </View>}
     <ScrollView
       contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
     >
@@ -154,6 +93,8 @@ const LoginScreen = ({ props }) => {
         </View>
         <CustomTextInput
           placeholder={'Email'}
+          onChangeText={text=>setEmail(text)}
+          defaultValue={'raghu11697@gmail.com'}
         />
         <View style={{ width: '90%', alignSelf: 'center' }}>
           <CustomTextBoxLabel
@@ -162,11 +103,14 @@ const LoginScreen = ({ props }) => {
         </View>
         <CustomTextInput
           placeholder={'Password '}
+          onChangeText={text=>setPassword(text)}
+          defaultValue={'123456'}
         />
         <View>
           <CutomButton
             title={'Login'}
             textStyle={styles.buttontext}
+            onPress={()=>{loginButtonClick()}}
 
           />
         </View>
@@ -188,6 +132,7 @@ const LoginScreen = ({ props }) => {
         />
       </View>
     </ScrollView>
+    </>
   );
 };
 

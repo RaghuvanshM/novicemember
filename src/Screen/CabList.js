@@ -6,9 +6,10 @@ import ArrowLeft from 'react-native-vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
 import { Marker } from 'react-native-maps';
 import images from '../assets/images/image';
-import Button from '../component/Button/Button'
-import Colors from '../module/utils/Colors'
-const CabListScreen = () => {
+import Button from '../component/Button/Button';
+import Colors from '../module/utils/Colors';
+const CabListScreen = (props) => {
+    
     const navigation = useNavigation();
     const [itemindex, setItemIndex] = useState(null)
     const data = [
@@ -66,7 +67,6 @@ const CabListScreen = () => {
         
     }
     const renderItem = ({ item, index }) => {
-
         return (
             <TouchableOpacity
                 style={itemindex == index ? { ...styles.itemstyle } : { ...styles.itemstyle1 }}
@@ -91,45 +91,19 @@ const CabListScreen = () => {
     };
     return (
         <View style={{ flex: 1 }}>
-            <View style={{ flex: 1 }}>
-                <MapView
-                    style={styles.mapStyle}
-                    showsUserLocation={true}
-                    zoomEnabled={true}
-                    zoomControlEnabled={true}
-                    initialRegion={{
-                        latitude: 27.140221,
-                        longitude: 81.961082,
-                        latitudeDelta: 0.0122,
-                        longitudeDelta: 0.0121,
-                    }}>
-                    <Marker
-                        coordinate={{ latitude: 28.57966, longitude: 77.32111 }}
-                        title={'Location'}
-                        description={'Driver Location'}
-                    />
-
-                    <ArrowLeft
-                        name="arrowleft"
-                        size={30}
-                        style={{ margin: '4%', marginBottom: '30%', height: 30, width: 30 }}
-                        onPress={() => {
-                            navigation.goBack();
-                        }}
-                    />
-                </MapView>
-            </View>
-            <View style={{ flex: 2, elevation: 2, backgroundColor: 'white' }}>
+            
+            
                 <FlatList
                     data={data}
                     renderItem={renderItem}
                     keyExtractor={(item, index) => String(index)}
                 />
-            </View>
+          
             <View style={{marginVertical:'1%'}}>
                 <Button
                     title={'Confirm'}
                     textStyle={styles.buttontext}
+                    onPress={()=>{props.onPress()}}
                 />
             </View>
         </View>
