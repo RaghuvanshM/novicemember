@@ -35,7 +35,7 @@ mapreducer.on(pickupLatLong, (state, payload) => {
     };
   });
   mapreducer.on(dropAddress, (state, payload) => {
-
+    console.log(payload)
     return {
       ...state,
       destionationadd:payload

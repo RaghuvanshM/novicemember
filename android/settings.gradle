@@ -12,3 +12,6 @@ project(':react-native-community-geolocation').projectDir = new File(rootProject
 include ':mapmyindia-restapi-react-native-beta'
 project(':mapmyindia-restapi-react-native-beta').projectDir = new File(rootProject.projectDir, '../node_modules/mapmyindia-restapi-react-native-beta/android')
 
+include ':lottie-react-native'
+project(':lottie-react-native').projectDir = new File(rootProject.projectDir, '../node_modules/lottie-react-native/src/android')
+

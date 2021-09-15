@@ -45,8 +45,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         height:height/4,
         width: width - 20,
-        marginTop: 10,
-        marginHorizontal: 10
+        margin:10
     },
     slideImage: {
         height:height/5,

@@ -7,7 +7,8 @@ export const APIUrl = {
  userbaseUrl:'https://novice.jingleinfo.com/novicecabnew/mobileapp/Member/',
  signup:'memberSingup',
  login:'memberlogin',
- getDriver:'https://novice.jingleinfo.com/novicecabnew/mobileapp/Vehicle/showNearbyCab'
+ getDriver:'https://novice.jingleinfo.com/novicecabnew/mobileapp/Vehicle/showNearbyCab',
+ usercabbook:'https://novice.jingleinfo.com/novicecabnew/mobileapp/User/UserBooking'
   
 };
 export const ENV_TYPE = {

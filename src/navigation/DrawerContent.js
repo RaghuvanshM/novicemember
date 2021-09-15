@@ -6,6 +6,7 @@ import { ProfileScreen, HomeScreen } from '..';
 import CustomeContent from './CustomeContent';
 const Drawer = createDrawerNavigator();
 const DrawerNavigation = () => {
+  alert('hello')
   return (
     <Drawer.Navigator initialRouteName="Home"
     initialRouteName="Home"

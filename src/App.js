@@ -8,6 +8,7 @@ import {StatusBar, View,Alert} from 'react-native';
 import {enableScreens} from 'react-native-screens';
 import SplashScreenComponent from '../src/Screen/Splash';
 import Toast from 'react-native-toast-message';
+import messaging from '@react-native-firebase/messaging';
 enableScreens();
 const persistor = persistStore(Store);
 
@@ -17,7 +18,7 @@ const App = () => {
       persistor.flush();
     };
   }, []);
-
+ 
   return (
     <View style={{flex:1}}>
         <Provider store={Store}>

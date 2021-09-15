@@ -22,6 +22,7 @@ const TextBoxComponent = props => {
         value={props.value}
         onChangeText={props.onChangeText}
         defaultValue={props.defaultValue}
+        autoFocus={props.autoFocus}
       />
       {props.isicon ? (
         <TouchableOpacity style={{justifyContent: 'center'}}

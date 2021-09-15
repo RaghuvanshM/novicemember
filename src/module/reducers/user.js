@@ -1,10 +1,10 @@
-import {createReducer} from 'redux-act';
+import { createReducer } from 'redux-act';
 import {
   authUser,
   signOutUser,
   sendOtp,
   userCurrntAddress,
-  
+
   userpickupLocation,
   userdropLocatin,
   userDropLatLong,
@@ -17,24 +17,25 @@ import {
 
 const initialState = {
   isAuth: false,
+  profilebyemail: '',
   profile: '',
   phonenumber: '',
   currentAddress: '',
   pickupaddress: '',
   dropaddress: '',
-  pickuplatlong:0,
-  droplatlong:0,
-  isButtonCLick:false
+  pickuplatlong: 0,
+  droplatlong: 0,
+  isButtonCLick: false
 };
 
 export const user = createReducer({}, initialState);
 user.on(loginSuccess, (state, payload) => {
-
+  console.log(payload)
   return {
     ...state,
     isAuth: true,
-    profile: payload,
-    isButtonCLick:false
+    profilebyemail: payload,
+    isButtonCLick: false
   };
 });
 user.on(signOutUser, state => {
@@ -46,17 +47,17 @@ user.on(signOutUser, state => {
   };
 });
 
-user.on(loginFailed,(state,payload)=>{
+user.on(loginFailed, (state, payload) => {
   return {
     ...state,
-    isAuth:false,
-    isButtonCLick:false
+    isAuth: false,
+    isButtonCLick: false
   }
 })
-user.on(loginButtonPress,(state)=>{
+user.on(loginButtonPress, (state) => {
   return {
     ...state,
-    isButtonCLick:true
+    isButtonCLick: true
   }
 })
 user.on(sendOtp, (state, payload) => {
@@ -68,6 +69,6 @@ user.on(sendOtp, (state, payload) => {
 user.on(removeButtonPress, (state, payload) => {
   return {
     ...state,
-    isButtonCLick:false
+    isButtonCLick: false
   };
 });

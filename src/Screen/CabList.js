@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Mapmyindia from 'mapmyindia-restapi-react-native-beta';
-import { Text, View, StyleSheet, Image, FlatList, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, Image, FlatList, TouchableOpacity, Dimensions } from 'react-native';
 import MapView from 'react-native-maps';
 import ArrowLeft from 'react-native-vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
@@ -8,68 +8,49 @@ import { Marker } from 'react-native-maps';
 import images from '../assets/images/image';
 import Button from '../component/Button/Button';
 import Colors from '../module/utils/Colors';
-const CabListScreen = (props) => {
-    
+import data from '../Contants/data';
+import { useDispatch, useSelector } from 'react-redux';
+import { getDropLocation, getPickupAddress, getPickUpLocation, getProfileByEmail } from '../module/selectors';
+import { BookCab } from '../module/actions';
+import { Color } from 'chalk';
+const { height, width } = Dimensions.get('screen')
+const CabListScreen = ({ onPress }) => {
     const navigation = useNavigation();
-    const [itemindex, setItemIndex] = useState(null)
-    const data = [
-        {
-            cariimage: images.carimage,
-            cabname: 'cab1',
-            droptime: '11:37',
-            price: '38.90',
-        },
-        {
-            cariimage: images.carimage,
-            cabname: 'cab1',
-            droptime: '11:37',
-            price: '38.90',
-        },
-        {
-            cariimage: images.carimage,
-            cabname: 'cab1',
-            droptime: '11:37',
-            price: '38.90',
-        },
-        {
-            cariimage: images.carimage,
-            cabname: 'cab1',
-            droptime: '11:37',
-            price: '38.90',
-        },
-        {
-            cariimage: images.carimage,
-            cabname: 'cab1',
-            droptime: '11:37',
-            price: '38.90',
-        },
-        {
-            cariimage: images.carimage,
-            cabname: 'cab1',
-            droptime: '11:37',
-            price: '38.90',
-        },
-        {
-            cariimage: images.carimage,
-            cabname: 'cab1',
-            droptime: '11:37',
-            price: '38.90',
-        },
-        {
-            cariimage: images.carimage,
-            cabname: 'cab1',
-            droptime: '11:37',
-            price: '38.90',
-        },
-    ];
+    const dispatch = useDispatch()
+    var dateandtime = new Date()
+    const getProfiledetail = useSelector(getProfileByEmail)
+    const destination = useSelector(getDropLocation)
+    const origin = useSelector(getPickUpLocation)
+    const pickupAddress = useSelector(getPickupAddress)
     const singleItemPress = (item, index) => {
         setItemIndex(index)
-        
+    }
+    const onConfirPress = () => {
+        alert('he;')
+
+        dispatch(BookCab(
+            {
+                'pickup_user_name': getProfiledetail?.name,
+                'pickup_phone_number': getProfiledetail?.mobile,
+                'pickup_location': pickupAddress,
+                'pickup_lat': origin?.lat,
+                'pickup_long': origin?.lng,
+                'pickup_date': dateandtime.toLocaleDateString(),
+                'pickup_time': dateandtime.toLocaleTimeString(),
+                'dropoff_location': 'Noida Sector 62',
+                'dropoff_lat': destination?.lat,
+                'dropoff_long': destination?.lng,
+                'id_user': getProfiledetail?.id_user,
+                'transport': 'mini'
+
+            }
+        ))
+        navigation.navigate('findingdriver')
     }
     const renderItem = ({ item, index }) => {
         return (
             <TouchableOpacity
-                style={itemindex == index ? { ...styles.itemstyle } : { ...styles.itemstyle1 }}
+                style={{ ...styles.itemstyle1 }}
                 onPress={() => { singleItemPress(item, index) }}
             >
                 <View style={{ flexDirection: 'row', padding: 10 }}>
@@ -90,21 +71,20 @@ const CabListScreen = (props) => {
         )
     };
     return (
-        <View style={{ flex: 1 }}>
-            
-            
-                <FlatList
-                    data={data}
-                    renderItem={renderItem}
-                    keyExtractor={(item, index) => String(index)}
-                />
-          
-            <View style={{marginVertical:'1%'}}>
-                <Button
-                    title={'Confirm'}
-                    textStyle={styles.buttontext}
-                    onPress={()=>{props.onPress()}}
-                />
+        <View style={{ flex: 1, backgroundColor: 'white' }}>
+            <FlatList
+                data={data}
+                renderItem={renderItem}
+                keyExtractor={(item, index) => String(index)}
+            />
+            <View style={styles.bottomButton}>
+                <Text style={styles.rupeesStyle}>&#8377;38.90</Text>
+                <TouchableOpacity
+                    style={styles.bookingButton}
+                    onPress={() => { onConfirPress() }}
+                >
+                    <Text style={styles.bookText}>Book</Text>
+                </TouchableOpacity>
             </View>
         </View>
     );
@@ -125,11 +105,11 @@ const styles = StyleSheet.create({
     },
     cabname: {
         fontSize: 16,
-        color:Colors.sidbardbackgroundcolor,
+        color: Colors.sidbardbackgroundcolor,
         fontWeight: 'bold'
     },
     droptime: {
-        color:Colors.screentextColor
+        color: Colors.screentextColor
     },
     buttontext: {
         fontSize: 20,
@@ -144,5 +124,32 @@ const styles = StyleSheet.create({
     },
     itemstyle1: {
         flexDirection: 'row', justifyContent: 'space-between', backgroundColor: Colors.selecteditmeback
+    },
+    bottomButton: {
+        height: 100,
+        backgroundColor: 'white',
+        elevation: 5,
+        justifyContent: 'space-evenly',
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    rupeesStyle: {
+        fontSize: 24,
+        fontFamily: 'OpenSans-Bold'
+
+    },
+    bookingButton: {
+        backgroundColor: Colors.buttoncolor,
+        height: 50,
+        width: width * 0.3,
+        justifyContent: 'center',
+        alignItems: 'center'
+
+    },
+    bookText: {
+        fontSize: 18,
+        color: 'white',
+        fontFamily: 'OpenSans-Bold'
+
     }
 });

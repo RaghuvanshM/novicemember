@@ -8,106 +8,144 @@ import {
   Image,
   ScrollView
 } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { phoneAuth, sendOtp } from '../module/actions';
-import { TextInput } from 'react-native-paper';
-import LinearGradient from 'react-native-linear-gradient';
-import Icon from 'react-native-vector-icons/AntDesign';
-import { useNavigation } from '@react-navigation/native';
-import Appconstant from '../Contants/Appconstant';
-import Iconlist from '../module/utils/icon';
+
+import { useIsFocused, useNavigation } from '@react-navigation/native';
+
 import CustomTextInput from '../component/TextInput/TextBox';
 import CustomTextBoxLabel from '../component/Label/TextBoxLabel'
 import CutomButton from '../component/Button/Button';
 import images from '../assets/images/image';
 import Colors from '../module/utils/Colors';
 import auth from '@react-native-firebase/auth';
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
+const regx =/^[6-9]\d{9}$/
 
 
 const PhoneSignIn = () => {
-  // If null, no SMS has been sent
+
   const navigation = useNavigation()
+  // If null, no SMS has been sent
   const [confirm, setConfirm] = useState(null);
+  const [phoneNumber, setPhoneNumber] = useState('')
+  const [loading, setLoading] = useState(false)
+  const isFocused = useIsFocused()
   const [code, setCode] = useState('');
-  const [phone, setPhone] = useState('')
+
+
+  const validatePhone =()=>{
+    if(regx.test(phoneNumber)){
+      signInWithPhoneNumber()
+    }
+    else{
+      alert('Enter Correct Phone NUMBER')
+    }
+  }
+
   // Handle the button press
   async function signInWithPhoneNumber() {
+    setLoading(true)
     try {
-      const confirmation = await auth().signInWithPhoneNumber(`+91 ${phone}`);
+      const confirmation = await auth().signInWithPhoneNumber(`+91 ${phoneNumber}`);
       console.log(confirmation)
       setConfirm(confirmation);
+      setLoading(false)
     }
     catch (e) {
       console.log(e)
+      setLoading(false)
     }
   }
 
   async function confirmCode() {
-    try {
-      await confirm.confirm(code);
+    setLoading(true)
 
+    try {
+      console.log(code)
+      let a = await confirm.confirm(code);
+      setLoading(false)
+      navigation.navigate('registration')
+      console.log(a)
     } catch (error) {
-      console.log('Invalid code.');
+      console.log(error)
+      setLoading(false)
+      alert('Invalid code.');
+
     }
   }
   useEffect(() => {
-    console.log(confirm)
-
-  })
+    if (isFocused) {
+      console.log('focused')
+      setLoading(false)
+    }
+    else {
+      console.log('dfsfafas')
+    }
+  }, [isFocused])
   if (!confirm) {
     return (
-      <View style={styles.container}>
-        <ArrowleftICON />
-        <KeyboardAwareScrollView
-          contentContainerStyle={styles.keyboardAvoidingContainer}
-          showsVerticalScrollIndicator={false}
-          bounces={false}
+      <>
+        {loading && <View
+          style={{
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            justifyContent: 'center',
+            backgroundColor: 'rgba(3,3,3, 0.8)',
+            zIndex: 5,
+          }}>
+          <ActivityIndicator size="large" color="#fff" />
+        </View>}
+        <View style={styles.container}>
 
-          keyboardShouldPersistTaps={'always'}
-          enableOnAndroid={true}
-        >
-          <PhoneIMage />
-          <Text style={styles.mobiletext}>Enter Your Mobile Number</Text>
-          <Text style={styles.otpText}>We will send you a OTP Verification</Text>
-          <View style={{ width: '90%', alignSelf: 'center', margin: '2%' }}>
-            <CustomTextBoxLabel
-              label={'Enter Mobile Number'}
+          <ScrollView
+            contentContainerStyle={{flexGrow:1,justifyContent:'center'}}
+            showsVerticalScrollIndicator={false}
+            bounces={false}
+
+            keyboardShouldPersistTaps={'always'}
+            enableOnAndroid={true}
+          >
+            <PhoneIMage />
+            <Text style={styles.mobiletext}>Enter Your Mobile Number</Text>
+            <Text style={styles.otpText}>We will send you a OTP Verification</Text>
+            <View style={{ width: '90%', alignSelf: 'center', margin: '2%' }}>
+              <CustomTextBoxLabel
+                label={'Enter Mobile Number'}
+              />
+
+            </View>
+            <CustomTextInput
+              placeholder={'Phone Number'}
+              keyboardType={'number-pad'}
+              onChangeText={text => setPhoneNumber(text)}
             />
+            <CutomButton
+              title={'Send'}
+              onPress={validatePhone}
+              textStyle={styles.buttontext}
 
-          </View>
-          <CustomTextInput
-            placeholder={'Phone Number'}
-            keyboardType={'number-pad'}
-            onChangeText={text => setPhone(text)}
-          />
-          <CutomButton
-            title={'Send'}
-            onPress={signInWithPhoneNumber}
-            textStyle={styles.buttontext}
-
-          />
-        </KeyboardAwareScrollView>
-      </View>
+            />
+          </ScrollView>
+        </View>
+      </>
     );
   }
 
   return (
     <>
       <View style={styles.container}>
-        <ArrowleftICON />
-        <KeyboardAwareScrollView
-          contentContainerStyle={styles.keyboardAvoidingContainer}
+
+        <ScrollView
+          contentContainerStyle={{flexGrow:1,justifyContent:'center'}}
           showsVerticalScrollIndicator={false}
           bounces={false}
 
-          keyboardShouldPersistTaps={'always'}
+
           enableOnAndroid={true}
         >
           <PhoneIMage />
           <Text style={styles.mobiletext}>OTP VERIFICATION</Text>
-          <Text style={styles.otpText}>Enter OTP sent to +917895769455</Text>
+          <Text style={styles.otpText}>{`Enter OTP sent to ${phoneNumber}`}</Text>
           <View style={{ width: '90%', alignSelf: 'center', margin: '2%' }}>
             <CustomTextBoxLabel
               label={'Enter Otp'}
@@ -118,6 +156,7 @@ const PhoneSignIn = () => {
             placeholder={'Otp'}
             keyboardType={'number-pad'}
             onChangeText={text => setCode(text)}
+            autoFocus={true}
           />
           <CutomButton
             title={'Verify'}
@@ -127,10 +166,25 @@ const PhoneSignIn = () => {
           />
           <View style={{ flexDirection: 'row', justifyContent: 'center', margin: '5%' }}>
             <Text style={styles.otpText}>Didn't receive the OTP ?</Text>
-            <TouchableOpacity><Text style={styles.resendotp}>Resend OTP </Text></TouchableOpacity>
+            <TouchableOpacity
+            onPress={validatePhone}
+            ><Text style={styles.resendotp}>Resend OTP </Text>
+            </TouchableOpacity>
           </View>
-        </KeyboardAwareScrollView>
+        </ScrollView>
       </View>
+      {loading && <View
+        style={{
+          position: 'absolute',
+          width: '100%',
+          height: '100%',
+          justifyContent: 'center',
+          backgroundColor: 'rgba(3,3,3, 0.8)',
+          zIndex: 5,
+        }}>
+        <ActivityIndicator size="large" color="#fff" />
+      </View>}
+
     </>
   );
 }
@@ -138,21 +192,7 @@ export default PhoneSignIn
 
 
 
-const ArrowleftICON = () => {
-  return (
-    <View>
-      <TouchableOpacity
-        onPress={() => { navigation.goBack() }}
-      >
-        <Icon
-          name={Iconlist.arrowleft}
-          size={30}
-          style={{ margin: '4%' }}
-        />
-      </TouchableOpacity>
-    </View>
-  )
-}
+
 
 const PhoneIMage = () => {
   return (
@@ -202,12 +242,10 @@ const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   container: {
-    flex: 1
+    flex: 1,
+    justifyContent:'center'
   },
-  keyboardAvoidingContainer: {
-    flexGrow: 1,
-    justifyContent: 'center'
-  },
+ 
   resendotp: {
     fontSize: 14,
     color: Colors.resesttTextColor,
@@ -215,3 +253,50 @@ const styles = StyleSheet.create({
   }
 
 });
+
+// import React, { useState } from 'react';
+// import { Button, TextInput } from 'react-native';
+// import auth from '@react-native-firebase/auth';
+
+// function PhoneSignIn() {
+//   // If null, no SMS has been sent
+//   const [confirm, setConfirm] = useState(null);
+
+//   const [code, setCode] = useState('');
+
+//   // Handle the button press
+//   async function signInWithPhoneNumber(phoneNumber) {
+//     const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
+//     console.log(confirmation)
+//     setConfirm(confirmation);
+//   }
+
+//   async function confirmCode() {
+//     try {
+//       console.log(code)
+//     let a=  await confirm.confirm(code);
+//     console.log(a)
+//     } catch (error) {
+//       console.log(error)
+//       console.log('Invalid code.');
+//     }
+//   }
+
+//   if (!confirm) {
+//     return (
+//       <Button
+//         title="Phone Number Sign In"
+//         onPress={() => signInWithPhoneNumber('+917895769455')}
+//       />
+//     );
+//   }
+
+//   return (
+//     <>
+//       <TextInput value={code} onChangeText={text => setCode(text)} />
+//       <Button title="Confirm Code" onPress={() => confirmCode()} />
+//     </>
+//   );
+// }
+
+// export default PhoneSignIn

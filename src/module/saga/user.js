@@ -12,7 +12,6 @@ export const signIn = function*(action){
 
   try {
     const userDetails = yield call(signInApi,APIUrl.login,{...action.payload});
-  
     if(userDetails.data.response.status==='true'){
     yield put(loginSuccess(userDetails.data.data))
     Toast.show({
@@ -33,7 +32,7 @@ export const signIn = function*(action){
     }
     
   } catch (e) {
-
+    console.log(e)
     yield put(loginFailed(e?.response?.data?.message));
     Toast.show({
       type: 'error',

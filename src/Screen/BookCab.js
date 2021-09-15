@@ -3,27 +3,35 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Text, View, Animated, TouchableOpacity, StyleSheet, Dimensions, TextInput } from 'react-native';
 import MapView from 'react-native-maps';
 import { Marker } from 'react-native-maps';
-import { useSelector } from 'react-redux';
-import { getDropLocation, getPickupAddress, getPickUpLocation } from '../module/selectors'
+import { useDispatch, useSelector } from 'react-redux';
+import { getDropLocation, getPickupAddress, getPickUpLocation, getProfileByEmail } from '../module/selectors'
 import AnDesign from 'react-native-vector-icons/AntDesign'
 import RouteIcon from 'react-native-vector-icons/FontAwesome5'
 import FullScreenIcon from 'react-native-vector-icons/MaterialIcons'
 import CabListScreen from './CabList';
 import MapViewDirections from 'react-native-maps-directions';
-
+import { BookCab } from '../module/actions';
+import { createStackNavigator } from '@react-navigation/stack';
+import FindingDriver from './FindingDriver';
+import DriverDetails from './DriverDetail';
+const Stack = createStackNavigator();
 const { height, width } = Dimensions.get('screen')
 const PickUpLocation = () => {
+   
     const navigation = useNavigation()
+    const dispatch = useDispatch()
     const mapRef = useRef();
     const [lat, setLat] = useState(28.579660)
     const [lng, setLng] = useState(77.321110)
     const pickupAddress = useSelector(getPickupAddress)
+
     const [animateValue] = useState(new Animated.Value(0))
     const [animatedButton] = useState(new Animated.Value(height))
     const [animatedIcon] = useState(new Animated.Value(height / 1.5))
     const [isFullScreen, setFullScreen] = useState(false)
     const origin = useSelector(getPickUpLocation)
     const destination = useSelector(getDropLocation)
+    const getProfiledetail = useSelector(getProfileByEmail)
    
     const isfocused = useIsFocused()
 
@@ -39,7 +47,7 @@ const PickUpLocation = () => {
             useNativeDriver: false
         }).start()
     }
-    const moveTop =()=>{
+    const moveTop = () => {
         Animated.timing(animateValue, {
             toValue: 2,
             duration: 1000,
@@ -105,7 +113,7 @@ const PickUpLocation = () => {
         moveTop()
         setFullScreen(true)
     }
- 
+   
     return (
         <>
 
@@ -170,34 +178,19 @@ const PickUpLocation = () => {
                     size={25}
                 />
             </TouchableOpacity>
-            <Animated.View
-                style={{ ...styles.arroleftview, bottom: animatedIcon }}
 
+
+
+            <Stack.Navigator initialRouteName="cablist"
+                headerMode={'none'}
             >
-                {isFullScreen ? <TouchableOpacity
-                    onPress={() => fullscreen()}
-                >
-                    <FullScreenIcon
-                        name={'fullscreen'}
-                        size={25}
-                    />
-                </TouchableOpacity> :
-                    <TouchableOpacity
-                    onPress={() => exitFullScreen()}
-                    >
-                        <FullScreenIcon
-                            name={'fullscreen-exit'}
-                            size={25}
-                        />
-                    </TouchableOpacity>}
-            </Animated.View>
-            <Animated.View style={{ ...styles.bottomview, flex: animateValue }}>
-                <CabListScreen
-                    onPress={() => { change() }}
+                <Stack.Screen name="cablist" component={CabListScreen}
 
                 />
+                <Stack.Screen name="findingdriver" component={FindingDriver} />
+                <Stack.Screen name="driverdetail" component={DriverDetails} />
+            </Stack.Navigator>
 
-            </Animated.View>
 
         </>
     )

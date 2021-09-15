@@ -25,16 +25,14 @@ const DestinationSearch = () => {
 
     useEffect(() => {
         if (isfocused) {
-            dispatch(dropAddress(''))
-            dispatch(dropuLatLong(''))
+          
             Animated.timing(animatedButton, {
                 toValue: height / 4,
                 duration: 1000,
                 useNativeDriver: false
             }).start()
         } else {
-            dispatch(dropAddress(''))
-            dispatch(dropuLatLong(''))
+          
             Animated.timing(animatedButton, {
                 toValue: 0,
                 duration: 2000,
@@ -59,7 +57,7 @@ const DestinationSearch = () => {
      navigation.navigate('bookcab')
     }
     useEffect(() => {
-        dispatch(dropAddress(''))
+       
         Animated.timing(animateValue, {
             toValue: 0,
             duration: 100,

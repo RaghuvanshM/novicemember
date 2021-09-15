@@ -9,6 +9,7 @@ const images = {
     mobilephone:require('../images/phone.png'),
     becommemberimg:require('../images/Member.png'),
     unchebox:require('../images/checkBoxUnchecked.png'),
-    checkbox:require('../images/checkBox.png')
+    checkbox:require('../images/checkBox.png'),
+    person:require('../images/men.jpeg')
 }
 export default images;

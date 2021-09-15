@@ -1,5 +1,5 @@
 import React, { Component, useEffect, useState } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, Button, Image, ScrollView,ActivityIndicator } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, Button, Image, ScrollView, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {
@@ -20,6 +20,8 @@ import Colors from '../module/utils/Colors';
 import Iconlist from '../module/utils/icon'
 import images from '../assets/images/image';
 import { getIsButtonCLick } from '../module/selectors/user';
+import messaging from '@react-native-firebase/messaging';
+
 const LoginScreen = ({ props }) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -29,15 +31,18 @@ const LoginScreen = ({ props }) => {
   const isbuttonclick = useSelector(getIsButtonCLick)
 
   const loginButtonClick = async () => {
+    let token = await messaging().getToken()
+    console.log(token)
     dispatch(loginButtonPress())
-    dispatch(authUser({email,password}))
+    dispatch(authUser({ email, password, token }))
   };
-  useEffect(() => {
-  dispatch(removeButtonPress())
+  useEffect(async () => {
+
+    dispatch(removeButtonPress())
     GoogleSignin.configure({
       webClientId:
         '470668762963-a0m9hsdob83m1folnhku0av4mrbj33jg.apps.googleusercontent.com',
-        
+
       offlineAccess: true,
     });
   }, []);
@@ -48,90 +53,90 @@ const LoginScreen = ({ props }) => {
       const userinfo = await GoogleSignin.signIn();
       dispatch(authUser(userinfo.user));
     } catch (error) {
-    
-     
+
+
     }
   };
 
   return (
-  <>
-    {isbuttonclick && <View
-                style={{
-                    position: 'absolute',
-                    width: '100%',
-                    height: '100%',
-                    justifyContent: 'center',
-                    backgroundColor: 'rgba(3,3,3, 0.8)',
-                    zIndex: 5,
-                }}>
-                <ActivityIndicator size="large" color="#fff" />
-            </View>}
-    <ScrollView
-      contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
-    >
-      <TouchableOpacity style={{ flex: 1 }}
-      onPress={()=>{navigation.goBack()}}
+    <>
+      {isbuttonclick && <View
+        style={{
+          position: 'absolute',
+          width: '100%',
+          height: '100%',
+          justifyContent: 'center',
+          backgroundColor: 'rgba(3,3,3, 0.8)',
+          zIndex: 5,
+        }}>
+        <ActivityIndicator size="large" color="#fff" />
+      </View>}
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
       >
-        <Icon
-          name={Iconlist.arrowleft}
-          size={30}
-          style={{ margin: '4%' }}
-        />
-      </TouchableOpacity>
-      <View style={{ flex: 0 }}>
-        <Image
-          source={images.parrentloginiamge}
-          resizeMode='contain'
-          style={{ height: 70, width: '90%' }}
-        />
-      </View>
-      <View style={{ flex: 1 }}>
-        <View style={{ width: '90%', alignSelf: 'center' }}>
-          <CustomTextBoxLabel
-            label={'Enter Email'}
+        <TouchableOpacity style={{ flex: 1 }}
+          onPress={() => { navigation.goBack() }}
+        >
+          <Icon
+            name={Iconlist.arrowleft}
+            size={30}
+            style={{ margin: '4%' }}
+          />
+        </TouchableOpacity>
+        <View style={{ flex: 0 }}>
+          <Image
+            source={images.parrentloginiamge}
+            resizeMode='contain'
+            style={{ height: 70, width: '90%' }}
           />
         </View>
-        <CustomTextInput
-          placeholder={'Email'}
-          onChangeText={text=>setEmail(text)}
-          defaultValue={'raghu11697@gmail.com'}
-        />
-        <View style={{ width: '90%', alignSelf: 'center' }}>
-          <CustomTextBoxLabel
-            label={'Enter Password'}
+        <View style={{ flex: 1 }}>
+          <View style={{ width: '90%', alignSelf: 'center' }}>
+            <CustomTextBoxLabel
+              label={'Enter Email'}
+            />
+          </View>
+          <CustomTextInput
+            placeholder={'Email'}
+            onChangeText={text => setEmail(text)}
+            defaultValue={'raghu11697@gmail.com'}
           />
-        </View>
-        <CustomTextInput
-          placeholder={'Password '}
-          onChangeText={text=>setPassword(text)}
-          defaultValue={'123456'}
-        />
-        <View>
-          <CutomButton
-            title={'Login'}
-            textStyle={styles.buttontext}
-            onPress={()=>{loginButtonClick()}}
+          <View style={{ width: '90%', alignSelf: 'center' }}>
+            <CustomTextBoxLabel
+              label={'Enter Password'}
+            />
+          </View>
+          <CustomTextInput
+            placeholder={'Password '}
+            onChangeText={text => setPassword(text)}
+            defaultValue={'123456'}
+          />
+          <View>
+            <CutomButton
+              title={'Login'}
+              textStyle={styles.buttontext}
+              onPress={() => { loginButtonClick() }}
 
+            />
+          </View>
+          <View style={styles.forgetpasswordview}>
+            <Text style={styles.forgetpasstext}>
+              Forget Password?
+            </Text>
+            <Text style={styles.resettext}>
+              Reset here
+            </Text>
+          </View>
+        </View>
+        <View style={styles.googleloginbutton}>
+          <GoogleSigninButton
+            style={{ width: wp('90%') }}
+            onPress={signIn}
+            size={GoogleSigninButton.Size.Wide}
+            color={GoogleSigninButton.Color.Dark}
           />
         </View>
-        <View style={styles.forgetpasswordview}>
-          <Text style={styles.forgetpasstext}>
-            Forget Password?
-          </Text>
-          <Text style={styles.resettext}>
-            Reset here
-          </Text>
-        </View>
-      </View>
-      <View style={styles.googleloginbutton}>
-        <GoogleSigninButton
-          style={{ width: wp('90%') }}
-          onPress={signIn}
-          size={GoogleSigninButton.Size.Wide}
-          color={GoogleSigninButton.Color.Dark}
-        />
-      </View>
-    </ScrollView>
+      </ScrollView>
     </>
   );
 };
@@ -178,7 +183,7 @@ const styles = StyleSheet.create({
   forgetpasswordview: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop:'3%'
+    marginTop: '3%'
 
   },
   forgetpasstext: {

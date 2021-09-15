@@ -6,13 +6,12 @@ import FontAwesomeicon from 'react-native-vector-icons/Ionicons';
 import iconlist from '../module/utils/icon';
 import DrawerContentText from '../component/Label/DrawerContentLable';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUserProfile } from '../module/selectors';
+import { getProfileByEmail, getUserProfile } from '../module/selectors';
 
 const CustomeContent = (props) => {
     const navigation = useNavigation();
     const profile = useSelector(getUserProfile);
   
-   
     return (
         <SafeAreaView style={{ flex: 1 }}>
 
