@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Text,
   View,
@@ -6,113 +6,110 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Image,
-  ScrollView
+  ScrollView,
 } from 'react-native';
 
-import { useIsFocused, useNavigation } from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 
 import CustomTextInput from '../component/TextInput/TextBox';
-import CustomTextBoxLabel from '../component/Label/TextBoxLabel'
+import CustomTextBoxLabel from '../component/Label/TextBoxLabel';
 import CutomButton from '../component/Button/Button';
 import images from '../assets/images/image';
 import Colors from '../module/utils/Colors';
 import auth from '@react-native-firebase/auth';
 
-const regx =/^[6-9]\d{9}$/
-
+const regx = /^[6-9]\d{9}$/;
 
 const PhoneSignIn = () => {
-
-  const navigation = useNavigation()
+  const navigation = useNavigation();
   // If null, no SMS has been sent
   const [confirm, setConfirm] = useState(null);
-  const [phoneNumber, setPhoneNumber] = useState('')
-  const [loading, setLoading] = useState(false)
-  const isFocused = useIsFocused()
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [loading, setLoading] = useState(false);
+  const isFocused = useIsFocused();
   const [code, setCode] = useState('');
 
-
-  const validatePhone =()=>{
-    if(regx.test(phoneNumber)){
-      signInWithPhoneNumber()
-    }
-    else{
-      alert('Enter Correct Phone NUMBER')
-    }
-  }
+  const validatePhone = () => {
+    // if(regx.test(phoneNumber)){
+    //   signInWithPhoneNumber()
+    // }
+    // else{
+    //   alert('Enter Correct Phone NUMBER')
+    // }
+    setConfirm(true);
+    //  navigation.navigate('registration');
+  };
 
   // Handle the button press
   async function signInWithPhoneNumber() {
-    setLoading(true)
+    setLoading(true);
     try {
-      const confirmation = await auth().signInWithPhoneNumber(`+91 ${phoneNumber}`);
-      console.log(confirmation)
+      const confirmation = await auth().signInWithPhoneNumber(
+        `+91 ${phoneNumber}`,
+      );
+      console.log(confirmation);
       setConfirm(confirmation);
-      setLoading(false)
-    }
-    catch (e) {
-      console.log(e)
-      setLoading(false)
+      setLoading(false);
+    } catch (e) {
+      console.log(e);
+      setLoading(false);
     }
   }
 
   async function confirmCode() {
-    setLoading(true)
+    setLoading(true);
+    navigation.navigate('registration');
 
-    try {
-      console.log(code)
-      let a = await confirm.confirm(code);
-      setLoading(false)
-      navigation.navigate('registration')
-      console.log(a)
-    } catch (error) {
-      console.log(error)
-      setLoading(false)
-      alert('Invalid code.');
-
-    }
+    // try {
+    //   console.log(code);
+    //   let a = await confirm.confirm(code);
+    //   setLoading(false);
+    //   navigation.navigate('registration');
+    //   console.log(a);
+    // } catch (error) {
+    //   console.log(error);
+    //   setLoading(false);
+    //   alert('Invalid code.');
+    // }
   }
   useEffect(() => {
     if (isFocused) {
-      console.log('focused')
-      setLoading(false)
+      console.log('focused');
+      setLoading(false);
+    } else {
+      console.log('dfsfafas');
     }
-    else {
-      console.log('dfsfafas')
-    }
-  }, [isFocused])
+  }, [isFocused]);
   if (!confirm) {
     return (
       <>
-        {loading && <View
-          style={{
-            position: 'absolute',
-            width: '100%',
-            height: '100%',
-            justifyContent: 'center',
-            backgroundColor: 'rgba(3,3,3, 0.8)',
-            zIndex: 5,
-          }}>
-          <ActivityIndicator size="large" color="#fff" />
-        </View>}
+        {loading && (
+          <View
+            style={{
+              position: 'absolute',
+              width: '100%',
+              height: '100%',
+              justifyContent: 'center',
+              backgroundColor: 'rgba(3,3,3, 0.8)',
+              zIndex: 5,
+            }}>
+            <ActivityIndicator size="large" color="#fff" />
+          </View>
+        )}
         <View style={styles.container}>
-
           <ScrollView
-            contentContainerStyle={{flexGrow:1,justifyContent:'center'}}
+            contentContainerStyle={{flexGrow: 1, justifyContent: 'center'}}
             showsVerticalScrollIndicator={false}
             bounces={false}
-
             keyboardShouldPersistTaps={'always'}
-            enableOnAndroid={true}
-          >
+            enableOnAndroid={true}>
             <PhoneIMage />
             <Text style={styles.mobiletext}>Enter Your Mobile Number</Text>
-            <Text style={styles.otpText}>We will send you a OTP Verification</Text>
-            <View style={{ width: '90%', alignSelf: 'center', margin: '2%' }}>
-              <CustomTextBoxLabel
-                label={'Enter Mobile Number'}
-              />
-
+            <Text style={styles.otpText}>
+              We will send you a OTP Verification
+            </Text>
+            <View style={{width: '90%', alignSelf: 'center', margin: '2%'}}>
+              <CustomTextBoxLabel label={'Enter Mobile Number'} />
             </View>
             <CustomTextInput
               placeholder={'Phone Number'}
@@ -123,7 +120,6 @@ const PhoneSignIn = () => {
               title={'Send'}
               onPress={validatePhone}
               textStyle={styles.buttontext}
-
             />
           </ScrollView>
         </View>
@@ -134,23 +130,17 @@ const PhoneSignIn = () => {
   return (
     <>
       <View style={styles.container}>
-
         <ScrollView
-          contentContainerStyle={{flexGrow:1,justifyContent:'center'}}
+          contentContainerStyle={{flexGrow: 1, justifyContent: 'center'}}
           showsVerticalScrollIndicator={false}
           bounces={false}
-
-
-          enableOnAndroid={true}
-        >
+          enableOnAndroid={true}>
           <PhoneIMage />
           <Text style={styles.mobiletext}>OTP VERIFICATION</Text>
-          <Text style={styles.otpText}>{`Enter OTP sent to ${phoneNumber}`}</Text>
-          <View style={{ width: '90%', alignSelf: 'center', margin: '2%' }}>
-            <CustomTextBoxLabel
-              label={'Enter Otp'}
-            />
-
+          <Text
+            style={styles.otpText}>{`Enter OTP sent to ${phoneNumber}`}</Text>
+          <View style={{width: '90%', alignSelf: 'center', margin: '2%'}}>
+            <CustomTextBoxLabel label={'Enter Otp'} />
           </View>
           <CustomTextInput
             placeholder={'Otp'}
@@ -162,48 +152,47 @@ const PhoneSignIn = () => {
             title={'Verify'}
             textStyle={styles.buttontext}
             onPress={confirmCode}
-
           />
-          <View style={{ flexDirection: 'row', justifyContent: 'center', margin: '5%' }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+              margin: '5%',
+            }}>
             <Text style={styles.otpText}>Didn't receive the OTP ?</Text>
-            <TouchableOpacity
-            onPress={validatePhone}
-            ><Text style={styles.resendotp}>Resend OTP </Text>
+            <TouchableOpacity onPress={validatePhone}>
+              <Text style={styles.resendotp}>Resend OTP </Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
       </View>
-      {loading && <View
-        style={{
-          position: 'absolute',
-          width: '100%',
-          height: '100%',
-          justifyContent: 'center',
-          backgroundColor: 'rgba(3,3,3, 0.8)',
-          zIndex: 5,
-        }}>
-        <ActivityIndicator size="large" color="#fff" />
-      </View>}
-
+      {loading && (
+        <View
+          style={{
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            justifyContent: 'center',
+            backgroundColor: 'rgba(3,3,3, 0.8)',
+            zIndex: 5,
+          }}>
+          <ActivityIndicator size="large" color="#fff" />
+        </View>
+      )}
     </>
   );
-}
-export default PhoneSignIn
-
-
-
-
+};
+export default PhoneSignIn;
 
 const PhoneIMage = () => {
   return (
     <Image
       source={images.mobilephone}
-      resizeMode='contain'
-      style={{ height: 70, width: 70, alignSelf: 'center' }}
+      resizeMode="contain"
+      style={{height: 70, width: 70, alignSelf: 'center'}}
     />
-  )
-}
-
+  );
+};
 
 const styles = StyleSheet.create({
   singletextinput: {
@@ -233,25 +222,24 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: 'OpenSans-Light',
     margin: '2%',
-    alignSelf: 'center'
+    alignSelf: 'center',
   },
   otpText: {
     fontSize: 14,
     color: Colors.forgetPassowrdcolor,
     fontFamily: 'OpenSans-Bold',
-    alignSelf: 'center'
+    alignSelf: 'center',
   },
   container: {
     flex: 1,
-    justifyContent:'center'
+    justifyContent: 'center',
   },
- 
+
   resendotp: {
     fontSize: 14,
     color: Colors.resesttTextColor,
-    fontFamily: 'OpenSans-Bold'
-  }
-
+    fontFamily: 'OpenSans-Bold',
+  },
 });
 
 // import React, { useState } from 'react';
