@@ -1,111 +1,91 @@
-import React, { Component, useEffect } from 'react';
-import { Text, View, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
+import React from 'react';
 import {
-  heightPercentageToDP as hp,
-  widthPercentageToDP as wp,
-} from 'react-native-responsive-screen';
-import { useNavigation } from '@react-navigation/native';
-import { useSelector, useDispatch } from 'react-redux';
-import { phoneAuth } from '../module/actions';
-import Button from '../component/Button/Button';
+  ImageBackground, 
+  Text,
+  StyleSheet, 
+  ScrollView, 
+  View,
+  TextInput,
+  TouchableOpacity,
+  Image} from 'react-native';
 import images from '../assets/images/image';
-import call from 'react-native-phone-call'
-const args = {
-  number: '7895769455', // String value with the number to call
-  prompt: false // Optional boolean property. Determines if the user should be prompt prior to the call 
-}
-const Confirmation = () => {
-  const navigation = useNavigation();
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(phoneAuth());
-  }, []);
-  const onSignUpPress = () => {
+// import BackgroundImage from '../component/BackgroundImage/BackgroundImage';
 
-    navigation.navigate('otpscreen');
-  };
-  const onSigninPress = () => {
-    navigation.navigate('login');
-  };
-  const phonecall =()=>{
-    call(args).catch(console.error)
-  }
+const Confirmation = ({navigation}) => {
   return (
-    <View style={{ flex: 1, justifyContent: 'center' }}>
-      <View style={{flex:1}}>
-        <Image
-          source={images.splashbgimage}
-          resizeMode="cover"
-          style={{ width:'100%', bottom:0,position:'absolute', alignSelf: 'center' }}
-        />
+  
+      <View style={ styles.container }>
+        
+        <ImageBackground source={images.splashbgimage} style={styles.backgroundImage} >
+        
+          <View style={ styles.loginForm }>
+            
+            <Text style={ styles.text }>Login</Text>
+              
+          </View>
+          <View style={styles.inputContainer}>
+           
+            <TextInput style={styles.inputText}
+            placeholder='*Enter Email' />
+             <TextInput style={styles.inputText}
+            placeholder='*Enter Passward' />
+          </View>
+          <TouchableOpacity 
+          style={styles.loginButton}
+          onPress={()=>{
+            navigation.navigate('otpscreen')
+          }}
+          >
+            <Text style={styles.loginText}>Login</Text>
+          </TouchableOpacity>
+        </ImageBackground>
       </View>
-      <View style={{ flex: 0.4, marginTop: '2%' }}>
-        <View>
-          <Button
-            title={'SIGN  IN'}
-            textStyle={styles.buttontext}
-            onPress={onSigninPress}
-          />
-        </View>
-        <View style={{ marginTop: '2%' }}>
-          <Button
-            title={'SIGN  UP'}
-            textStyle={styles.buttontext}
-            onPress={onSignUpPress}
-          />
-        </View>
-       
-      </View>
-    </View>
-  );
+    );
 };
-export default Confirmation;
-const styles = StyleSheet.create({
-  imagestyle: {
-    height: hp('60%'),
-    width: wp('100%'),
+export default Confirmation
+
+var styles = StyleSheet.create({
+  container: {
+    flex: 1,
   },
-  linearGradient: {
-    padding: 10,
-    width: wp('90%'),
-    marginTop: hp('5%'),
-    alignSelf: 'center',
-  },
-  buttonText: {
-    fontSize: 20,
-    fontFamily: 'Gill Sans',
-    textAlign: 'center',
-    margin: 10,
-    color: '#ffffff',
-    backgroundColor: 'transparent',
-  },
-  Registrationbutton: {
-    padding: 5,
-    borderWidth: 4,
-    borderColor: '#4c669f',
-    width: wp('90%'),
-    alignSelf: 'center',
-    marginTop: hp('3%'),
-  },
-  RegisterText: {
-    color: '#4c669f',
-    fontSize: 20,
-    fontFamily: 'Gill Sans',
-    textAlign: 'center',
-    margin: 10,
-    backgroundColor: 'transparent',
-  },
-  becomemembertext: {
-    fontSize: 24,
-    alignSelf: 'center',
-    color: '#34404b',
-  },
-  buttontext: {
-    fontSize: 20,
-    color: 'white',
-    alignSelf: 'center',
-    fontWeight: 'bold',
+
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover', // or 'stretch',
     justifyContent: 'center',
   },
+
+  loginForm: {
+    backgroundColor: 'transparent',
+    alignItems: 'center'
+  },
+
+  text: {
+    fontSize: 30,
+    fontWeight: 'bold',
+  },
+  inputContainer:{
+    padding:20,
+    marginTop:20
+  },
+  inputText:{
+    borderBottomWidth:.5
+  },
+  loginButton:{
+    height:35,
+    width:'35%',
+    backgroundColor:"black",
+    justifyContent:'center',
+    marginTop:5,
+    marginLeft:20,
+    borderRadius:15
+  },
+  loginText:{
+    color:'white',
+    alignSelf:'center',
+    fontSize:14,
+    fontWeight:'bold'
+  }
+  
+  
 });

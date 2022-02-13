@@ -6,7 +6,8 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Image,
-  ScrollView
+  ScrollView,
+  ImageBackground
 } from 'react-native';
 
 import { useIsFocused, useNavigation } from '@react-navigation/native';
@@ -17,6 +18,7 @@ import CutomButton from '../component/Button/Button';
 import images from '../assets/images/image';
 import Colors from '../module/utils/Colors';
 import auth from '@react-native-firebase/auth';
+import BackgroundImage from '../component/BackgroundImage';
 
 const regx =/^[6-9]\d{9}$/
 
@@ -196,11 +198,10 @@ export default PhoneSignIn
 
 const PhoneIMage = () => {
   return (
-    <Image
-      source={images.mobilephone}
-      resizeMode='contain'
-      style={{ height: 70, width: 70, alignSelf: 'center' }}
-    />
+ <ImageBackground  style={{height:'100%',width:'100%'}}
+ source={require('../assets/images/otp.png')} resizeMode="contain" />
+     
+  
   )
 }
 
@@ -243,7 +244,8 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    justifyContent:'center'
+    justifyContent:'center',
+    backgroundColor:'#f0d677'
   },
  
   resendotp: {
