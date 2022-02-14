@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, {Component, useEffect, useState} from 'react';
 import {
   Text,
   View,
@@ -7,12 +7,13 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Image,
+  ImageBackground,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
-import { useNavigation } from '@react-navigation/native';
-import { getPhoneNumber } from '../module/selectors';
-import { useSelector } from 'react-redux';
-import { showMessage, hideMessage } from 'react-native-flash-message';
+import {useNavigation} from '@react-navigation/native';
+import {getPhoneNumber} from '../module/selectors';
+import {useSelector} from 'react-redux';
+import {showMessage, hideMessage} from 'react-native-flash-message';
 import Iconlist from '../module/utils/icon';
 import Allimage from '../assets/images/image';
 import Colors from '../module/utils/Colors';
@@ -20,14 +21,14 @@ import CustomTextInput from '../component/TextInput/OtpBox';
 import CustomTextBoxLabel from '../component/Label/TextBoxLabel';
 import CutomButton from '../component/Button/Button';
 import auth from '@react-native-firebase/auth';
-const OtpScreen = (props) => {
+const OtpScreen = props => {
   const [otpverify, setOTP] = useState('');
   const navigation = useNavigation();
   const phonenumber = useSelector(getPhoneNumber);
 
-  useEffect(()=>{
-console.log(props.route.params)
-  },[])
+  useEffect(() => {
+    console.log(props.route.params);
+  }, []);
   const confirmVerificationCode = () => {
     if (phonenumber.otp == otpverify) {
       showMessage({
@@ -44,46 +45,55 @@ console.log(props.route.params)
     }
   };
   return (
-    <ScrollView contentContainerStyle={{ flex: 1 }}>
-      <TouchableOpacity
-        style={{ flex: 0.3 }}
-        onPress={() => {
-          navigation.goBack();
-        }}>
-        <Icon name={Iconlist.arrowleft} size={30} style={{ margin: '4%' }} />
-      </TouchableOpacity>
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Image
-          source={Allimage.mobilephone}
-          resizeMode="contain"
-          style={{ height: '40%', width: '90%' }}
-        />
-        <Text style={styles.mobiletext}>OTP VERIFICATION</Text>
-        <Text style={styles.otpText}>Enter OTP sent to +917895769455</Text>
-      </View>
-      <View style={{ flex: 1 }}>
-        <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-          <CustomTextInput placeholder={''} keyboardType={'number-pad'} />
-          <CustomTextInput placeholder={''} keyboardType={'number-pad'} />
-          <CustomTextInput placeholder={''} keyboardType={'number-pad'} />
-          <CustomTextInput placeholder={''} keyboardType={'number-pad'}
-
-
+    <ImageBackground
+      source={images.screenBg}
+      style={{height: '100%', width: '100%', flex: 1}}
+      resizeMode="stretch">
+      <ScrollView contentContainerStyle={{flex: 1}}>
+        <TouchableOpacity
+          style={{flex: 0.3}}
+          onPress={() => {
+            navigation.goBack();
+          }}>
+          <Icon name={Iconlist.arrowleft} size={30} style={{margin: '4%'}} />
+        </TouchableOpacity>
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <Image
+            source={Allimage.mobilephone}
+            resizeMode="contain"
+            style={{height: '40%', width: '90%'}}
           />
+          <Text style={styles.mobiletext}>OTP VERIFICATION</Text>
+          <Text style={styles.otpText}>Enter OTP sent to +917895769455</Text>
         </View>
-        <View style={{ flexDirection: 'row', justifyContent: 'center', margin: '5%' }}>
-          <Text style={styles.otpText}>Didn't receive the OTP ?</Text>
-          <TouchableOpacity><Text style={styles.resendotp}>Resend OTP </Text></TouchableOpacity>
+        <View style={{flex: 1}}>
+          <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+            <CustomTextInput placeholder={''} keyboardType={'number-pad'} />
+            <CustomTextInput placeholder={''} keyboardType={'number-pad'} />
+            <CustomTextInput placeholder={''} keyboardType={'number-pad'} />
+            <CustomTextInput placeholder={''} keyboardType={'number-pad'} />
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+              margin: '5%',
+            }}>
+            <Text style={styles.otpText}>Didn't receive the OTP ?</Text>
+            <TouchableOpacity>
+              <Text style={styles.resendotp}>Resend OTP </Text>
+            </TouchableOpacity>
+          </View>
+          <View>
+            <CutomButton
+              title={'Submit'}
+              textStyle={styles.buttontext}
+              // onPress={()=>{navigation.navigate('registration')}}
+            />
+          </View>
         </View>
-        <View>
-          <CutomButton title={'Submit'} 
-          textStyle={styles.buttontext}
-          // onPress={()=>{navigation.navigate('registration')}}
-
-          />
-        </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </ImageBackground>
   );
 };
 
@@ -110,6 +120,6 @@ const styles = StyleSheet.create({
   resendotp: {
     fontSize: 18,
     color: Colors.resesttTextColor,
-    fontFamily: 'OpenSans-Bold'
-  }
+    fontFamily: 'OpenSans-Bold',
+  },
 });

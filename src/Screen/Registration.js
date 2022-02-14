@@ -20,6 +20,8 @@ import CutomButton from '../component/Button/Button';
 import {useDispatch, useSelector} from 'react-redux';
 import {memberSignUp, signupclick} from '../module/actions';
 import {getSignUpButtonClick} from '../module/selectors/usersignup';
+import CircularTextBoxComponent from '../component/TextInput/CircularTextBox';
+import BackgroundImage from '../component/BackgroundImage/BackgroundImage';
 
 const Registration = () => {
   const [icon, setIcon] = useState(true);
@@ -56,71 +58,86 @@ const Registration = () => {
           <ActivityIndicator size="large" color="#fff" />
         </View>
       )}
-      <ScrollView
-        contentContainerStyle={{flexGrow: 1, justifyContent: 'center'}}>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.goBack();
-          }}>
-          <Icon name={Iconlist.arrowleft} size={30} style={{margin: '4%'}} />
-        </TouchableOpacity>
-        <View style={{justifyContent: 'center', alignSelf: 'center', flex: 0}}>
-          <Image
-            source={images.becommemberimg}
-            resizeMode="contain"
-            style={{height: 100, width: 300}}
-          />
-        </View>
-        <View style={{justifyContent: 'center'}}>
-          <View style={{width: '90%', alignSelf: 'center'}}>
-            <CustomTextBoxLabel label={'First Name'} />
+      <BackgroundImage>
+        <ScrollView
+          contentContainerStyle={{flexGrow: 1, justifyContent: 'center'}}>
+          <View style={styles.headerContainer}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.goBack();
+              }}
+              style={{marginTop: 12}}>
+              <Icon
+                name={Iconlist.arrowleft}
+                size={30}
+                style={{margin: '4%'}}
+              />
+            </TouchableOpacity>
+            <Image
+              source={images.dummyPerson}
+              resizeMode="contain"
+              style={{height: 100, width: 300}}
+            />
           </View>
-          <CustomTextInput
-            placeholder={'First Name'}
-            onChangeText={text => setFirstName(text)}
-          />
-          <View style={{width: '90%', alignSelf: 'center'}}>
-            <CustomTextBoxLabel label={'Last Name'} />
+          <View
+            style={{justifyContent: 'center', alignSelf: 'center', flex: 0}}>
+            <Image
+              source={images.becommemberimg}
+              resizeMode="contain"
+              style={{height: 100, width: 300}}
+            />
           </View>
-          <CustomTextInput
-            placeholder={'Last Name'}
-            onChangeText={text => setLastName(text)}
-          />
-          <View style={{width: '90%', alignSelf: 'center'}}>
-            <CustomTextBoxLabel label={'Enter Email '} />
+          <View style={{justifyContent: 'center'}}>
+            <View style={{width: '90%', alignSelf: 'center'}}>
+              <CustomTextBoxLabel label={'First Name'} />
+            </View>
+            <CircularTextBoxComponent
+              placeholder={'First Name'}
+              onChangeText={text => setFirstName(text)}
+            />
+            <View style={{width: '90%', alignSelf: 'center'}}>
+              <CustomTextBoxLabel label={'Last Name'} />
+            </View>
+            <CircularTextBoxComponent
+              placeholder={'Last Name'}
+              onChangeText={text => setLastName(text)}
+            />
+            <View style={{width: '90%', alignSelf: 'center'}}>
+              <CustomTextBoxLabel label={'Enter Email '} />
+            </View>
+            <CircularTextBoxComponent
+              placeholder={'Email'}
+              onChangeText={text => setEmail(text)}
+            />
+            <View style={{width: '90%', alignSelf: 'center'}}>
+              <CustomTextBoxLabel label={'Enter Phone'} />
+            </View>
+            <CircularTextBoxComponent
+              placeholder={'Phone Name'}
+              onChangeText={text => setMobile(text)}
+            />
+            <View style={{width: '90%', alignSelf: 'center'}}>
+              <CustomTextBoxLabel label={'Create Strong Password'} />
+            </View>
+            <CircularTextBoxComponent
+              placeholder={'Password'}
+              isicon={true}
+              iconPress={() => {
+                setIcon(!icon);
+              }}
+              icon={icon}
+              onChangeText={text => setPassword(text)}
+            />
           </View>
-          <CustomTextInput
-            placeholder={'Email'}
-            onChangeText={text => setEmail(text)}
-          />
-          <View style={{width: '90%', alignSelf: 'center'}}>
-            <CustomTextBoxLabel label={'Enter Phone'} />
+          <View style={styles.btnContainer}>
+            <CutomButton
+              title={'Next'}
+              textStyle={styles.buttontext}
+              onPress={onNextPress}
+            />
           </View>
-          <CustomTextInput
-            placeholder={'Phone Name'}
-            onChangeText={text => setMobile(text)}
-          />
-          <View style={{width: '90%', alignSelf: 'center'}}>
-            <CustomTextBoxLabel label={'Create Strong Password'} />
-          </View>
-          <CustomTextInput
-            placeholder={'Password'}
-            isicon={true}
-            iconPress={() => {
-              setIcon(!icon);
-            }}
-            icon={icon}
-            onChangeText={text => setPassword(text)}
-          />
-        </View>
-        <View>
-          <CutomButton
-            title={'Next'}
-            textStyle={styles.buttontext}
-            onPress={onNextPress}
-          />
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </BackgroundImage>
     </>
   );
 };
@@ -128,11 +145,22 @@ export default Registration;
 
 const styles = StyleSheet.create({
   buttontext: {
-    fontSize: 20,
+    fontSize: 14,
     color: 'white',
     alignSelf: 'center',
     fontWeight: 'bold',
 
     justifyContent: 'center',
+  },
+  btnContainer: {
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

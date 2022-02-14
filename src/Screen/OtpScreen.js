@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   Image,
   ScrollView,
+  ImageBackground,
 } from 'react-native';
 
 import {useIsFocused, useNavigation} from '@react-navigation/native';
@@ -17,6 +18,7 @@ import CutomButton from '../component/Button/Button';
 import images from '../assets/images/image';
 import Colors from '../module/utils/Colors';
 import auth from '@react-native-firebase/auth';
+import BackgroundImage from '../component/BackgroundImage/BackgroundImage';
 
 const regx = /^[6-9]\d{9}$/;
 
@@ -96,7 +98,7 @@ const PhoneSignIn = () => {
             <ActivityIndicator size="large" color="#fff" />
           </View>
         )}
-        <View style={styles.container}>
+        <BackgroundImage>
           <ScrollView
             contentContainerStyle={{flexGrow: 1, justifyContent: 'center'}}
             showsVerticalScrollIndicator={false}
@@ -108,51 +110,48 @@ const PhoneSignIn = () => {
             <Text style={styles.otpText}>
               We will send you a OTP Verification
             </Text>
-            <View style={{width: '90%', alignSelf: 'center', margin: '2%'}}>
-              <CustomTextBoxLabel label={'Enter Mobile Number'} />
-            </View>
+
             <CustomTextInput
-              placeholder={'Phone Number'}
+              placeholder={'* Phone Number'}
               keyboardType={'number-pad'}
               onChangeText={text => setPhoneNumber(text)}
             />
-            <CutomButton
-              title={'Send'}
-              onPress={validatePhone}
-              textStyle={styles.buttontext}
-            />
+            <View style={styles.btnContainer}>
+              <CutomButton
+                title={'Send'}
+                onPress={validatePhone}
+                textStyle={styles.buttontext}
+              />
+            </View>
           </ScrollView>
-        </View>
+        </BackgroundImage>
       </>
     );
   }
 
   return (
     <>
-      <View style={styles.container}>
+      <BackgroundImage>
         <ScrollView
           contentContainerStyle={{flexGrow: 1, justifyContent: 'center'}}
           showsVerticalScrollIndicator={false}
           bounces={false}
           enableOnAndroid={true}>
           <PhoneIMage />
-          <Text style={styles.mobiletext}>OTP VERIFICATION</Text>
-          <Text
-            style={styles.otpText}>{`Enter OTP sent to ${phoneNumber}`}</Text>
-          <View style={{width: '90%', alignSelf: 'center', margin: '2%'}}>
-            <CustomTextBoxLabel label={'Enter Otp'} />
-          </View>
           <CustomTextInput
-            placeholder={'Otp'}
+            placeholder={'* Enter Otp'}
             keyboardType={'number-pad'}
             onChangeText={text => setCode(text)}
             autoFocus={true}
           />
-          <CutomButton
-            title={'Verify'}
-            textStyle={styles.buttontext}
-            onPress={confirmCode}
-          />
+          <View style={styles.btnContainer}>
+            <CutomButton
+              title={'Verify'}
+              textStyle={styles.buttontext}
+              onPress={confirmCode}
+            />
+          </View>
+
           <View
             style={{
               flexDirection: 'row',
@@ -165,7 +164,7 @@ const PhoneSignIn = () => {
             </TouchableOpacity>
           </View>
         </ScrollView>
-      </View>
+      </BackgroundImage>
       {loading && (
         <View
           style={{
@@ -186,10 +185,31 @@ export default PhoneSignIn;
 
 const PhoneIMage = () => {
   return (
+    <>
+      <Image
+        source={images.mobilenew}
+        resizeMode="contain"
+        style={{height: '30%', zIndex: 20, width: '30%', alignSelf: 'center'}}
+      />
+      <View
+        style={{
+          position: 'absolute',
+          right: -85,
+          top: 80,
+          height: '100%',
+          width: '100%',
+        }}>
+        <CarIMage />
+      </View>
+    </>
+  );
+};
+const CarIMage = () => {
+  return (
     <Image
-      source={images.mobilephone}
+      source={images.carvertical}
       resizeMode="contain"
-      style={{height: 70, width: 70, alignSelf: 'center'}}
+      style={{height: '30%', width: '30%', alignSelf: 'center'}}
     />
   );
 };
@@ -204,6 +224,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginLeft: '2%',
   },
+  btnContainer: {
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
+  },
   linearGradient: {
     padding: 10,
     width: '90%',
@@ -211,10 +237,9 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   buttontext: {
-    fontSize: 20,
+    fontSize: 16,
     color: 'white',
     alignSelf: 'center',
-    fontWeight: 'bold',
 
     justifyContent: 'center',
   },
