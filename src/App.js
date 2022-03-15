@@ -22,16 +22,7 @@ const App = () => {
   return (
     <View style={{ flex: 1 }}>
       <Provider store={Store}>
-        <PersistGate
-          persistor={persistor}
-          children={(bootstrapped) => {
-            if (bootstrapped) {
-              return <RouterComponent />;
-            } else {
-              return null;
-            }
-          }}
-        />
+        <RouterComponent />
       </Provider>
       <Toast ref={(ref) => Toast.setRef(ref)} />
     </View>

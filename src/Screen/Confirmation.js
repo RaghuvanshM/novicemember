@@ -31,11 +31,12 @@ const Confirmation = ({ navigation }) => {
     // dispatch(loginSuccess());
     let payload = { email: Email, password: Password, token };
     let Result = await signInApi(APIUrl.login, payload);
-    if (Result.data.response.status == true) {
+    if (Result.data.response.status == "true") {
       Toast.show(Result.data.response.message);
       dispatch(loginSuccess());
     } else {
       Toast.show(Result.data.response.message);
+      console.log(Result.data.response);
     }
   };
   return (
