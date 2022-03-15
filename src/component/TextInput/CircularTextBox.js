@@ -11,7 +11,7 @@ import CutomButton from '../Button/Button';
 import Iconlist from '../../module/utils/icon';
 import Icon from 'react-native-vector-icons/Entypo';
 
-const TextBoxComponent = props => {
+const CircularTextBoxComponent = props => {
   return (
     <View style={styles.textinputview}>
       <TextInput
@@ -23,12 +23,11 @@ const TextBoxComponent = props => {
         onChangeText={props.onChangeText}
         defaultValue={props.defaultValue}
         autoFocus={props.autoFocus}
-        placeholderTextColor={'#3e3721'}
       />
       {/* {props.isicon ? (
-        <TouchableOpacity
-          style={{justifyContent: 'center'}}
-          onPress={props.iconPress}>
+        <TouchableOpacity style={{justifyContent: 'center'}}
+        onPress={props.iconPress}
+        >
           {props.icon ? (
             <Icon name={Iconlist.eyecross} size={30} style={{margin: '4%'}} />
           ) : (
@@ -39,17 +38,21 @@ const TextBoxComponent = props => {
     </View>
   );
 };
-export default TextBoxComponent;
+export default CircularTextBoxComponent;
 
 const styles = StyleSheet.create({
   textinputview: {
-    borderBottomWidth: 2,
+    borderWidth: 2,
     width: '90%',
+    backgroundColor: 'white',
+    borderColor: '#cdc7b0',
+    borderRadius: 30,
+    marginBottom: '4%',
     alignSelf: 'center',
-    borderBottomColor: Colors.textinputbordercolor,
+    paddingHorizontal: 10,
   },
   textinput: {
-    fontSize: 18,
+    fontSize: 15,
     width: '100%',
   },
 });

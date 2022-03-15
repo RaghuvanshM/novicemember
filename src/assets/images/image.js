@@ -11,6 +11,11 @@ const images = {
   unchebox: require('../images/checkBoxUnchecked.png'),
   checkbox: require('../images/checkBox.png'),
   person: require('../images/men.jpeg'),
-  loginBackground: require('../images/mainbg.jpeg'),
+  screenBg: require('../images/bg.png'),
+  logoimg: require('../images/logo.png'),
+  horrizontalcar: require('../images/horrizontalcar.png'),
+  mobilenew: require('../images/mobile.png'),
+  carvertical: require('../images/car.png'),
+  dummyPerson: require('../images/dummyperson.png'),
 };
 export default images;

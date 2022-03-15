@@ -45,10 +45,10 @@ const LoginScreen = ({props}) => {
   const isbuttonclick = useSelector(getIsButtonCLick);
 
   const loginButtonClick = async () => {
-    // let token = await messaging().getToken()
-    // console.log(token)
-    // dispatch(loginButtonPress())
-    // dispatch(authUser({ email, password, token }))
+    let token = await messaging().getToken()
+    console.log(token)
+    dispatch(loginButtonPress())
+    dispatch(authUser({ email, password, token }))
     dispatch(loginSuccess());
   };
   useEffect(async () => {
